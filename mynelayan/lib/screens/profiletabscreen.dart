@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:mynelayan/screens/registrationscreen.dart';
 
 class ProfileTabScreen extends StatefulWidget {
   const ProfileTabScreen({super.key});
@@ -17,7 +16,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
     super.initState();
     print('Profile');
   }
-  
+
   @override
   void dispose() {
     super.dispose();
@@ -27,6 +26,18 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(maintitle));
+        child: Column(
+      children: [
+        ElevatedButton(onPressed: () {}, child: const Text('Login')),
+        ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (content) => const RegistrationScreen()));
+            },
+            child: const Text('Registration'))
+      ],
+    ));
   }
 }

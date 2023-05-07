@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:mynelayan/screens/buyertabscreen.dart';
 import 'package:mynelayan/screens/mainscreen.dart';
 
 class SplashScreen extends StatefulWidget {

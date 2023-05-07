@@ -20,10 +20,10 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     tabchildren = [
-      BuyerTabScreen(),
-      SellerTabScreen(),
-      ProfileTabScreen(),
-      NewsTabScreen(),
+      const BuyerTabScreen(),
+      const SellerTabScreen(),
+      const ProfileTabScreen(),
+      const NewsTabScreen(),
     ];
   }
 

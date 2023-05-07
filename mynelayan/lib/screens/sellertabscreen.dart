@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class SellerTabScreen extends StatefulWidget {
   const SellerTabScreen({super.key});
@@ -17,7 +15,7 @@ class _SellerTabScreenState extends State<SellerTabScreen> {
     super.initState();
     print('Seller');
   }
-  
+
   @override
   void dispose() {
     super.dispose();
@@ -26,7 +24,6 @@ class _SellerTabScreenState extends State<SellerTabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(maintitle));
+    return Center(child: Text(maintitle));
   }
 }
