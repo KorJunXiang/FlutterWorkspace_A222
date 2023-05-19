@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mynelayan/models/user.dart';
+import 'package:mynelayan/screens/loginscreen.dart';
 import 'package:mynelayan/screens/registrationscreen.dart';
 
 class ProfileTabScreen extends StatefulWidget {
-  const ProfileTabScreen({super.key});
+  final User user;
+  const ProfileTabScreen({super.key, required this.user});
 
   @override
   State<ProfileTabScreen> createState() => _ProfileTabScreenState();
@@ -10,6 +13,7 @@ class ProfileTabScreen extends StatefulWidget {
 
 class _ProfileTabScreenState extends State<ProfileTabScreen> {
   String maintitle = 'Profile';
+  late double screenHeight, screenWidth, cardwitdh;
 
   @override
   void initState() {
@@ -25,19 +29,74 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
 
   @override
   Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
     return Center(
-        child: Column(
-      children: [
-        ElevatedButton(onPressed: () {}, child: const Text('Login')),
-        ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (content) => const RegistrationScreen()));
-            },
-            child: const Text('Registration'))
-      ],
-    ));
+      child: Column(children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          height: screenHeight * 0.25,
+          width: screenWidth,
+          child: Card(
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                margin: const EdgeInsets.all(4),
+                width: screenWidth * 0.4,
+                child: Image.asset('assets/images/profile.png'),
+              ),
+              Expanded(
+                  flex: 6,
+                  child: Column(
+                    children: [
+                      Text(
+                        widget.user.name.toString(),
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                      Text(widget.user.email.toString()),
+                      Text(widget.user.phone.toString()),
+                      Text(widget.user.regdate.toString())
+                    ],
+                  ))
+            ]),
+          ),
+        ),
+        Container(
+          width: screenWidth,
+          alignment: Alignment.center,
+          color: Theme.of(context).colorScheme.background,
+          child: const Padding(
+            padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+            child: Text("PROFILE SETTINGS",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                )),
+          ),
+        ),
+        Expanded(
+            child: ListView(
+          children: [
+            MaterialButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (content) => const LoginScreen()));
+              },
+              child: const Text("LOGIN"),
+            ),
+            MaterialButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (content) => const RegistrationScreen()));
+              },
+              child: const Text("REGISTRATION"),
+            ),
+          ],
+        ))
+      ]),
+    );
   }
 }

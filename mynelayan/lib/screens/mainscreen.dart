@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mynelayan/models/user.dart';
 import 'package:mynelayan/screens/buyertabscreen.dart';
 import 'package:mynelayan/screens/newstabscreen.dart';
 import 'package:mynelayan/screens/profiletabscreen.dart';
 import 'package:mynelayan/screens/sellertabscreen.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final User user;
+
+  const MainScreen({super.key, required this.user});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -19,10 +22,13 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    print('MainScreen');
     tabchildren = [
-      const BuyerTabScreen(),
-      const SellerTabScreen(),
-      const ProfileTabScreen(),
+      BuyerTabScreen(user: widget.user),
+      SellerTabScreen(
+        user: widget.user,
+      ),
+      ProfileTabScreen(user: widget.user),
       const NewsTabScreen(),
     ];
   }
@@ -38,6 +44,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text(maintitle),
+          automaticallyImplyLeading: false,
         ),
         body: tabchildren[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(

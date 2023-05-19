@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mynelayan/config.dart';
+import 'package:mynelayan/screens/loginscreen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -16,9 +19,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _pass2EditingController = TextEditingController();
   bool _isChecked = false;
   final _formkey = GlobalKey<FormState>();
+  late double screenHeight, screenWidth, cardwitdh;
 
   @override
   Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text('User Registration'),
@@ -27,131 +33,144 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: Column(
           children: [
             SizedBox(
-              height: 200,
+              height: screenHeight * 0.35,
+              width: screenWidth,
               child: Image.asset(
                 'assets/images/register.jpg',
                 fit: BoxFit.cover,
               ),
             ),
-            Card(
-              elevation: 8,
-              child: Container(
-                margin: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Form(
-                        key: _formkey,
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              controller: _nameEditingController,
-                              validator: (val) =>
-                                  val!.isEmpty || (val.length < 5)
-                                      ? 'name must be longer than 5'
-                                      : null,
-                              keyboardType: TextInputType.text,
-                              decoration: const InputDecoration(
-                                  labelText: 'Name',
-                                  labelStyle: TextStyle(),
-                                  icon: Icon(Icons.person),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(width: 2))),
-                            ),
-                            TextFormField(
-                              controller: _phoneEditingController,
-                              validator: (val) =>
-                                  val!.isEmpty || (val.length < 10)
-                                      ? 'phone must be longer or equal than 10'
-                                      : null,
-                              keyboardType: TextInputType.phone,
-                              decoration: const InputDecoration(
-                                  labelText: 'Phone',
-                                  labelStyle: TextStyle(),
-                                  icon: Icon(Icons.phone),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(width: 2))),
-                            ),
-                            TextFormField(
-                              controller: _emailEditingController,
-                              validator: (val) => val!.isEmpty ||
-                                      !val.contains("@") ||
-                                      !val.contains(".")
-                                  ? "enter a valid email"
-                                  : null,
-                              keyboardType: TextInputType.text,
-                              decoration: const InputDecoration(
-                                  labelText: 'Email',
-                                  labelStyle: TextStyle(),
-                                  icon: Icon(Icons.email),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(width: 2))),
-                            ),
-                            TextFormField(
-                              controller: _pass1EditingController,
-                              validator: (val) =>
-                                  val!.isEmpty || (val.length < 5)
-                                      ? "password must be longer than 5"
-                                      : null,
-                              obscureText: true,
-                              keyboardType: TextInputType.text,
-                              decoration: const InputDecoration(
-                                  labelText: 'Password',
-                                  labelStyle: TextStyle(),
-                                  icon: Icon(Icons.lock),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(width: 2))),
-                            ),
-                            TextFormField(
-                              controller: _pass2EditingController,
-                              validator: (val) =>
-                                  val!.isEmpty || (val.length < 5)
-                                      ? "password must be longer than 5"
-                                      : null,
-                              obscureText: true,
-                              keyboardType: TextInputType.text,
-                              decoration: const InputDecoration(
-                                  labelText: 'Re-enter password',
-                                  labelStyle: TextStyle(),
-                                  icon: Icon(Icons.lock),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(width: 2))),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Row(
-                              children: [
-                                Checkbox(
-                                  value: _isChecked,
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      _isChecked = value!;
-                                    });
-                                  },
-                                ),
-                                GestureDetector(
-                                  onTap: null,
-                                  child: const Text('Agree with terms',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ),
-                                const SizedBox(
-                                  width: 16,
-                                ),
-                                Expanded(
-                                    child: ElevatedButton(
-                                        onPressed: onRegisterDialog,
-                                        child: const Text('Register')))
-                              ],
-                            ),
-                          ],
-                        ))
-                  ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                elevation: 8,
+                child: Container(
+                  margin: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Form(
+                          key: _formkey,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: _nameEditingController,
+                                validator: (val) =>
+                                    val!.isEmpty || (val.length < 5)
+                                        ? 'name must be longer than 5'
+                                        : null,
+                                keyboardType: TextInputType.text,
+                                decoration: const InputDecoration(
+                                    labelText: 'Name',
+                                    labelStyle: TextStyle(),
+                                    icon: Icon(Icons.person),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(width: 2))),
+                              ),
+                              TextFormField(
+                                controller: _phoneEditingController,
+                                validator: (val) => val!.isEmpty ||
+                                        (val.length < 10)
+                                    ? 'phone must be longer or equal than 10'
+                                    : null,
+                                keyboardType: TextInputType.phone,
+                                decoration: const InputDecoration(
+                                    labelText: 'Phone',
+                                    labelStyle: TextStyle(),
+                                    icon: Icon(Icons.phone),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(width: 2))),
+                              ),
+                              TextFormField(
+                                controller: _emailEditingController,
+                                validator: (val) => val!.isEmpty ||
+                                        !val.contains("@") ||
+                                        !val.contains(".")
+                                    ? "enter a valid email"
+                                    : null,
+                                keyboardType: TextInputType.text,
+                                decoration: const InputDecoration(
+                                    labelText: 'Email',
+                                    labelStyle: TextStyle(),
+                                    icon: Icon(Icons.email),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(width: 2))),
+                              ),
+                              TextFormField(
+                                controller: _pass1EditingController,
+                                validator: (val) =>
+                                    val!.isEmpty || (val.length < 5)
+                                        ? "password must be longer than 5"
+                                        : null,
+                                obscureText: true,
+                                keyboardType: TextInputType.text,
+                                decoration: const InputDecoration(
+                                    labelText: 'Password',
+                                    labelStyle: TextStyle(),
+                                    icon: Icon(Icons.lock),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(width: 2))),
+                              ),
+                              TextFormField(
+                                controller: _pass2EditingController,
+                                validator: (val) =>
+                                    val!.isEmpty || (val.length < 5)
+                                        ? "password must be longer than 5"
+                                        : null,
+                                obscureText: true,
+                                keyboardType: TextInputType.text,
+                                decoration: const InputDecoration(
+                                    labelText: 'Re-enter password',
+                                    labelStyle: TextStyle(),
+                                    icon: Icon(Icons.lock),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(width: 2))),
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    value: _isChecked,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        _isChecked = value!;
+                                      });
+                                    },
+                                  ),
+                                  GestureDetector(
+                                    onTap: null,
+                                    child: const Text('Agree with terms',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  ),
+                                  const SizedBox(
+                                    width: 16,
+                                  ),
+                                  Expanded(
+                                      child: ElevatedButton(
+                                          onPressed: onRegisterDialog,
+                                          child: const Text('Register')))
+                                ],
+                              ),
+                            ],
+                          ))
+                    ],
+                  ),
                 ),
               ),
-            )
+            ),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: _goLogin,
+              child: const Text(
+                'Already Registered? Login',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -213,21 +232,47 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void registerUser() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          title: Text("Please Wait"),
+          content: Text("Registration..."),
+        );
+      },
+    );
     String name = _nameEditingController.text;
     String email = _emailEditingController.text;
     String phone = _phoneEditingController.text;
     String pass1 = _pass1EditingController.text;
-    http.post(Uri.parse('http://10.19.79.224/mynelayan/php/register_user.php'),
-        body: {
-          "name": name,
-          "phone": phone,
-          "email": email,
-          "password": pass1
-        }).then((response) {
+    http.post(Uri.parse('${Config.server}/php/register_user.php'), body: {
+      "name": name,
+      "phone": phone,
+      "email": email,
+      "password": pass1
+    }).then((response) {
       print(response.body);
-      // if(response.statusCode == 200){
-
-      // }
+      var data = jsonDecode(response.body);
+      if (response.statusCode == 200 && data['status'] == 'success') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+          'Registration Success',
+          textAlign: TextAlign.center,
+        )));
+        return;
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+          'Registration Failed',
+          textAlign: TextAlign.center,
+        )));
+        return;
+      }
     });
+  }
+
+  void _goLogin() {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 }
