@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lab_assignment_2/models/user.dart';
 
 class ItemTabScreen extends StatefulWidget {
-  const ItemTabScreen({super.key});
+  final User user;
+  const ItemTabScreen({super.key, required this.user});
 
   @override
   State<ItemTabScreen> createState() => _ItemTabScreenState();
@@ -45,7 +47,13 @@ class _ItemTabScreenState extends State<ItemTabScreen> {
           ],
         ),
       ),
-      body: Center(child: Text(maintitle)),
+      body: Center(
+          child: Text(
+        widget.user.id.toString() == 'na'
+            ? 'Please login/register an account'
+            : 'Welcome back, ${widget.user.name}',
+        style: const TextStyle(fontFamily: 'Merriweather.italic'),
+      )),
     );
   }
 }

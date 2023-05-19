@@ -164,9 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
             onTap: _goToRegister,
             child: const Text(
               "New account?",
-              style: TextStyle(
-                fontSize: 18,
-              ),
+              style: TextStyle(fontSize: 18, fontFamily: 'Merriweather'),
             ),
           ),
           const SizedBox(
@@ -176,9 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
             onTap: _forgotDialog,
             child: const Text(
               "Forgot Password?",
-              style: TextStyle(
-                fontSize: 18,
-              ),
+              style: TextStyle(fontSize: 18, fontFamily: 'Merriweather'),
             ),
           ),
         ],

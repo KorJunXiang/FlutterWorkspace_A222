@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     print(widget.user.name);
     tabchildren = [
-      const ItemTabScreen(),
+      ItemTabScreen(user: widget.user),
       const MessageTabScreen(),
       ProfileTabScreen(user: widget.user)
     ];

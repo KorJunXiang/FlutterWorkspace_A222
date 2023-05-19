@@ -89,10 +89,17 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                               children: [
                                 Text(
                                   widget.user.name.toString(),
-                                  style: const TextStyle(fontSize: 24),
+                                  style: const TextStyle(
+                                      fontSize: 24, fontFamily: 'Merriweather'),
                                 ),
-                                Text(widget.user.email.toString()),
-                                Text(widget.user.regdate.toString()),
+                                Text(
+                                  widget.user.email.toString(),
+                                  style: const TextStyle(
+                                      fontFamily: 'Merriweather'),
+                                ),
+                                Text(widget.user.regdate.toString(),
+                                    style: const TextStyle(
+                                        fontFamily: 'Merriweather')),
                               ],
                             ),
                         ],
