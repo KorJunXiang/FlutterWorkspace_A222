@@ -93,6 +93,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           validator: (val) => val!.isEmpty || (val.length < 5)
                               ? "password must be longer than 5"
                               : null,
+                          keyboardType: TextInputType.text,
                           obscureText: _passwordVisible,
                           decoration: InputDecoration(
                               labelText: 'Password',
@@ -119,6 +120,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           validator: (val) => val!.isEmpty || (val.length < 5)
                               ? "password must be longer than 5"
                               : null,
+                          keyboardType: TextInputType.text,
                           obscureText: _password2Visible,
                           decoration: InputDecoration(
                               labelText: 'Re-enter password',
@@ -298,6 +300,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       "password": password,
     }).then((response) {
       if (response.statusCode == 200) {
+        print(response.body);
         var jsondata = jsonDecode(response.body);
         if (jsondata['status'] == 'success') {
           Fluttertoast.showToast(
