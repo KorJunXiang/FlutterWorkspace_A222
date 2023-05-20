@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lab_assignment_2/models/user.dart';
 import 'package:lab_assignment_2/screens/loginscreen.dart';
 import 'package:lab_assignment_2/screens/registrationscreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileTabScreen extends StatefulWidget {
   final User user;
@@ -223,7 +224,11 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
     );
   }
 
-  _logout() {
+  _logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('email', '');
+    await prefs.setString('pass', '');
+    await prefs.setBool('checkbox', false);
     setState(() {
       widget.user.id = "na";
       widget.user.name = "na";
