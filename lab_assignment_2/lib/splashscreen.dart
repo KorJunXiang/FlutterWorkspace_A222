@@ -76,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
         http.post(Uri.parse("${MyConfig.server}/php/user_login.php"),
             body: {"email": email, "password": password}).then((response) {
           if (response.statusCode == 200) {
-            print('Data Founded');
+            print('User Data Founded');
             var jsondata = jsonDecode(response.body);
             print(jsondata);
             user = User.fromJson(jsondata['data']);
