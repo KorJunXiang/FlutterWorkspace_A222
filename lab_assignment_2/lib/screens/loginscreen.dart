@@ -207,6 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print(response.body);
       if (response.statusCode == 200) {
         var jsondata = jsonDecode(response.body);
+        print(jsondata);
         if (jsondata['status'] == 'success') {
           User user = User.fromJson(jsondata['data']);
           Fluttertoast.showToast(

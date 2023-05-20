@@ -281,15 +281,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void registerUser() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const AlertDialog(
-          title: Text("Please Wait"),
-          content: Text("Registration..."),
-        );
-      },
-    );
     String name = _nameEditingController.text;
     String email = _emailEditingController.text;
     String password = _pass1EditingController.text;
@@ -305,15 +296,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         if (jsondata['status'] == 'success') {
           Fluttertoast.showToast(
               msg: 'Registration Success', toastLength: Toast.LENGTH_SHORT);
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (content) => const LoginScreen()));
         } else {
           Fluttertoast.showToast(
               msg: 'Registration Failed', toastLength: Toast.LENGTH_SHORT);
+          return;
         }
-        Navigator.pop(context);
       } else {
         Fluttertoast.showToast(
             msg: 'Registration Failed', toastLength: Toast.LENGTH_SHORT);
-        Navigator.pop(context);
+        return;
       }
     });
   }

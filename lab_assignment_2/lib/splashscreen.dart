@@ -46,7 +46,9 @@ class _SplashScreenState extends State<SplashScreen> {
                         fontFamily: 'Merriweather.italic',
                         color: Colors.black),
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   CircularProgressIndicator(),
                   Text(
                     "Version 0.1",

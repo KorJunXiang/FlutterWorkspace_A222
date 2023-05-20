@@ -20,7 +20,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    print(widget.user.name);
     tabchildren = [
       ItemTabScreen(user: widget.user),
       const MessageTabScreen(),
