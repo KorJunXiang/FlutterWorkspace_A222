@@ -19,10 +19,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     checkAndLogin();
-    // Timer(
-    //     const Duration(seconds: 3),
-    //     () => Navigator.pushReplacement(context,
-    //         MaterialPageRoute(builder: (content) => const MainScreen())));
   }
 
   @override
@@ -38,11 +34,11 @@ class _SplashScreenState extends State<SplashScreen> {
                         image: AssetImage('assets/images/splashscreen.png'),
                         scale: 2,
                         alignment: Alignment.center))),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 100, 0, 40),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 100, 0, 40),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
                     "BARTER IT",
                     style: TextStyle(
@@ -80,13 +76,6 @@ class _SplashScreenState extends State<SplashScreen> {
             var jsondata = jsonDecode(response.body);
             print(jsondata);
             user = User.fromJson(jsondata['data']);
-            // user = User(
-            //     id: "na",
-            //     name: "na",
-            //     email: "na",
-            //     datereg: "na",
-            //     password: "na",
-            //     otp: "na");
             Timer(
                 const Duration(seconds: 3),
                 () => Navigator.pushReplacement(

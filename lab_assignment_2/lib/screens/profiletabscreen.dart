@@ -136,9 +136,9 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                         MaterialPageRoute(
                             builder: (content) => const LoginScreen()));
                   },
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Text(
                         "LOGIN",
                         style: TextStyle(
@@ -168,9 +168,9 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                         MaterialPageRoute(
                             builder: (content) => const RegistrationScreen()));
                   },
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Text(
                         "REGISTRATION",
                         style: TextStyle(
@@ -195,9 +195,9 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                     width: 3,
                   ))),
                   onPressed: _logout,
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Text(
                         "LOGOUT",
                         style: TextStyle(
