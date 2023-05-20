@@ -83,9 +83,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               ))),
                       TextFormField(
                           controller: _passEditingController,
-                          validator: (val) => val!.isEmpty || (val.length < 5)
-                              ? "password must be longer than 5"
-                              : null,
+                          validator: (val) =>
+                              val!.isEmpty ? "enter your password" : null,
                           obscureText: _passwordVisible,
                           decoration: InputDecoration(
                               labelText: 'Password',
@@ -207,7 +206,6 @@ class _LoginScreenState extends State<LoginScreen> {
       print(response.body);
       if (response.statusCode == 200) {
         var jsondata = jsonDecode(response.body);
-        print(jsondata);
         if (jsondata['status'] == 'success') {
           User user = User.fromJson(jsondata['data']);
           Fluttertoast.showToast(
