@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lab_assignment_2/myconfig.dart';
 import 'package:lab_assignment_2/screens/loginscreen.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -280,7 +281,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  void registerUser() {
+  registerUser() {
     String name = _nameEditingController.text;
     String email = _emailEditingController.text;
     String password = _pass1EditingController.text;
@@ -289,13 +290,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       "name": name,
       "email": email,
       "password": password,
-    }).then((response) {
+    }).then((response) async {
       if (response.statusCode == 200) {
         print(response.body);
         var jsondata = jsonDecode(response.body);
         if (jsondata['status'] == 'success') {
           Fluttertoast.showToast(
               msg: 'Registration Success', toastLength: Toast.LENGTH_SHORT);
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('email', email);
+          await prefs.setString('pass', password);
+          await prefs.setBool('checkbox', true);
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (content) => const LoginScreen()));
         } else {
