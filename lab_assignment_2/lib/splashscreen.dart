@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    checkAndLogin();
+    // checkAndLogin();
   }
 
   @override
@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         scale: 2,
                         alignment: Alignment.center))),
             const Padding(
-              padding: EdgeInsets.fromLTRB(0, 100, 0, 40),
+              padding: EdgeInsets.fromLTRB(0, 150, 0, 40),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -46,6 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         fontFamily: 'Merriweather.italic',
                         color: Colors.black),
                   ),
+                  SizedBox(height: 20,),
                   CircularProgressIndicator(),
                   Text(
                     "Version 0.1",
