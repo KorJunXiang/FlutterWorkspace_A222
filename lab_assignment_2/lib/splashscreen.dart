@@ -72,10 +72,11 @@ class _SplashScreenState extends State<SplashScreen> {
     late User user;
     if (ischeck) {
       try {
-        print('yes');
+        print('isCheck');
         http.post(Uri.parse("${MyConfig.server}/php/user_login.php"),
             body: {"email": email, "password": password}).then((response) {
           if (response.statusCode == 200) {
+            print('Data Founded');
             var jsondata = jsonDecode(response.body);
             print(jsondata);
             user = User.fromJson(jsondata['data']);
@@ -86,6 +87,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     MaterialPageRoute(
                         builder: (content) => MainScreen(user: user))));
           } else {
+            print('No Data Found');
             user = User(
                 id: "na",
                 name: "na",
@@ -105,7 +107,7 @@ class _SplashScreenState extends State<SplashScreen> {
         print("Time out");
       }
     } else {
-      print('no');
+      print('isNotCheck');
       user = User(
           id: "na",
           name: "na",
