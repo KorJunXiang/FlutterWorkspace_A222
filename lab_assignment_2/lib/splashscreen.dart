@@ -47,8 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     "BARTER IT",
                     style: TextStyle(
                         fontSize: 50,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Merriweather.italic',
                         color: Colors.black),
                   ),
                   CircularProgressIndicator(),
@@ -56,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     "Version 0.1",
                     style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Merriweather',
                         color: Colors.black),
                   )
                 ],
@@ -81,6 +80,13 @@ class _SplashScreenState extends State<SplashScreen> {
             var jsondata = jsonDecode(response.body);
             print(jsondata);
             user = User.fromJson(jsondata['data']);
+            // user = User(
+            //     id: "na",
+            //     name: "na",
+            //     email: "na",
+            //     datereg: "na",
+            //     password: "na",
+            //     otp: "na");
             Timer(
                 const Duration(seconds: 3),
                 () => Navigator.pushReplacement(
@@ -92,7 +98,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 id: "na",
                 name: "na",
                 email: "na",
-                regdate: "na",
+                datereg: "na",
                 password: "na",
                 otp: "na");
             Timer(
@@ -112,7 +118,7 @@ class _SplashScreenState extends State<SplashScreen> {
           id: "na",
           name: "na",
           email: "na",
-          regdate: "na",
+          datereg: "na",
           password: "na",
           otp: "na");
       Timer(

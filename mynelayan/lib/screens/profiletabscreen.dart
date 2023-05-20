@@ -54,7 +54,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                       ),
                       Text(widget.user.email.toString()),
                       Text(widget.user.phone.toString()),
-                      Text(widget.user.regdate.toString())
+                      Text(widget.user.datereg.toString())
                     ],
                   ))
             ]),

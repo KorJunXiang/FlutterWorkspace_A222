@@ -32,11 +32,11 @@ class _SplashScreenState extends State<SplashScreen> {
                   image: DecorationImage(
                       image: AssetImage('assets/images/boat.jpg'),
                       fit: BoxFit.cover))),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(0, 50, 0, 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
                   "MY NELAYAN",
                   style: TextStyle(
@@ -86,7 +86,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 name: "na",
                 email: "na",
                 phone: "na",
-                regdate: "na",
+                datereg: "na",
                 password: "na",
                 otp: "na");
             Timer(
@@ -109,7 +109,7 @@ class _SplashScreenState extends State<SplashScreen> {
           name: "na",
           email: "na",
           phone: "na",
-          regdate: "na",
+          datereg: "na",
           password: "na",
           otp: "na");
       Timer(

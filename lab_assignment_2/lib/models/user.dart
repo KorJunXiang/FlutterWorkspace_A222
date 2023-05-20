@@ -4,9 +4,9 @@ class User {
   String? name;
   String? password;
   String? otp;
-  String? regdate;
+  String? datereg;
 
-  User({this.id, this.email, this.name, this.password, this.otp, this.regdate});
+  User({this.id, this.email, this.name, this.password, this.otp, this.datereg});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -14,7 +14,7 @@ class User {
     name = json['name'];
     password = json['password'];
     otp = json['otp'];
-    regdate = json['regdate'];
+    datereg = json['regdate'];
   }
 
   Map<String, dynamic> toJson() {
@@ -24,7 +24,7 @@ class User {
     data['name'] = name;
     data['password'] = password;
     data['otp'] = otp;
-    data['regdate'] = regdate;
+    data['regdate'] = datereg;
     return data;
   }
 }

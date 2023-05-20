@@ -97,7 +97,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                                   style: const TextStyle(
                                       fontFamily: 'Merriweather'),
                                 ),
-                                Text(widget.user.regdate.toString(),
+                                Text(widget.user.datereg.toString(),
                                     style: const TextStyle(
                                         fontFamily: 'Merriweather')),
                               ],
@@ -228,7 +228,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
       widget.user.id = "na";
       widget.user.name = "na";
       widget.user.email = "na";
-      widget.user.regdate = "na";
+      widget.user.datereg = "na";
       widget.user.password = "na";
       widget.user.otp = "na";
     });

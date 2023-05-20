@@ -28,7 +28,7 @@ class _SellerTabScreenState extends State<SellerTabScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(),
+      body: const Center(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (widget.user.id != 'na') {

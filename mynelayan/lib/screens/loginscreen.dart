@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mynelayan/models/user.dart';
-import 'package:mynelayan/screens/buyertabscreen.dart';
 import 'package:mynelayan/screens/mainscreen.dart';
 import 'package:mynelayan/screens/registrationscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
