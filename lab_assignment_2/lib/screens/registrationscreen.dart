@@ -300,7 +300,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('email', email);
           await prefs.setString('pass', password);
-          await prefs.setBool('checkbox', true);
+          await prefs.setBool('checkbox', false);
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (content) => const LoginScreen()));
         } else {
