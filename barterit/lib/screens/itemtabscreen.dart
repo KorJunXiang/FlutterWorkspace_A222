@@ -313,7 +313,7 @@ class _ItemTabScreenState extends State<ItemTabScreen> {
 
   Future<void> _refresh() async {
     return Future.delayed(
-      const Duration(seconds: 3),
+      const Duration(seconds: 1),
       () {
         setState(() {
           itemList.clear();
