@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lab_assignment_2/models/user.dart';
+import 'package:lab_assignment_2/screens/homescreen.dart';
 import 'package:lab_assignment_2/screens/itemtabscreen.dart';
 import 'package:lab_assignment_2/screens/messagetabscreen.dart';
 import 'package:lab_assignment_2/screens/profiletabscreen.dart';
@@ -15,12 +16,13 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   late List<Widget> tabchildren;
   int _currentIndex = 0;
-  String maintitle = 'Item';
+  String maintitle = 'Home';
 
   @override
   void initState() {
     super.initState();
     tabchildren = [
+      HomeTabScreen(user: widget.user),
       ItemTabScreen(user: widget.user),
       const MessageTabScreen(),
       ProfileTabScreen(user: widget.user)
@@ -41,6 +43,11 @@ class _MainScreenState extends State<MainScreen> {
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,
           items: const [
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home,
+                ),
+                label: "Home"),
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.change_circle,
@@ -64,12 +71,15 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _currentIndex = value;
       if (_currentIndex == 0) {
-        maintitle = "Item";
+        maintitle = "Home";
       }
       if (_currentIndex == 1) {
-        maintitle = "Message";
+        maintitle = "Item";
       }
       if (_currentIndex == 2) {
+        maintitle = "Message";
+      }
+      if (_currentIndex == 3) {
         maintitle = "Profile";
       }
     });

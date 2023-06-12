@@ -73,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (ischeck) {
       try {
         print('isCheck');
-        http.post(Uri.parse("${MyConfig.server}/php/user_login.php"),
+        http.post(Uri.parse("${MyConfig().server}/php/user_login.php"),
             body: {"email": email, "password": password}).then((response) {
           if (response.statusCode == 200) {
             print('User Data Founded');

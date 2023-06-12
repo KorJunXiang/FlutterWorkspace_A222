@@ -286,7 +286,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     String email = _emailEditingController.text;
     String password = _pass1EditingController.text;
 
-    http.post(Uri.parse('${MyConfig.server}/php/user_register.php'), body: {
+    http.post(Uri.parse('${MyConfig().server}/php/user_register.php'), body: {
       "name": name,
       "email": email,
       "password": password,

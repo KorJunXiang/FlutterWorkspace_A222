@@ -201,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     String email = _emailEditingController.text;
     String password = _passEditingController.text;
-    http.post(Uri.parse("${MyConfig.server}/php/user_login.php"),
+    http.post(Uri.parse("${MyConfig().server}/php/user_login.php"),
         body: {"email": email, "password": password}).then((response) {
       print(response.body);
       if (response.statusCode == 200) {

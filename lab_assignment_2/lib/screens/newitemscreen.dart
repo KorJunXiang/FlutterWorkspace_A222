@@ -1,52 +1,53 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mynelayan/config.dart';
-import 'package:mynelayan/models/user.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:http/http.dart' as http;
+import 'package:lab_assignment_2/models/user.dart';
+import 'package:lab_assignment_2/myconfig.dart';
 
-class NewCatchScreen extends StatefulWidget {
+class NewItemScreen extends StatefulWidget {
   final User user;
-  const NewCatchScreen({super.key, required this.user});
+
+  const NewItemScreen({super.key, required this.user});
 
   @override
-  State<NewCatchScreen> createState() => _NewCatchScreenState();
+  State<NewItemScreen> createState() => _NewItemScreenState();
 }
 
-class _NewCatchScreenState extends State<NewCatchScreen> {
+class _NewItemScreenState extends State<NewItemScreen> {
+  File? _image;
+  final List<File> _imageList = [];
+  var pathAsset = "assets/images/camera.png";
+  final _formKey = GlobalKey<FormState>();
   late double screenHeight, screenWidth, cardwitdh;
-  final TextEditingController _catchnameEditingController =
+  final TextEditingController _itemnameEditingController =
       TextEditingController();
-  final TextEditingController _catchdescEditingController =
+  final TextEditingController _itemdescEditingController =
       TextEditingController();
-  final TextEditingController _catchpriceEditingController =
-      TextEditingController();
-  final TextEditingController _catchqtyEditingController =
+  final TextEditingController _itemqtyEditingController =
       TextEditingController();
   final TextEditingController _prstateEditingController =
       TextEditingController();
   final TextEditingController _prlocalEditingController =
       TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  File? _image;
-  var pathAsset = "assets/images/camera.png";
-  String selectedType = "Fish";
-  List<String> catchlist = [
-    "Fish",
-    "Crab",
-    "Squid",
-    "Oysters",
-    "Mussels",
-    "Octopus",
-    "Scallops",
-    "Lobsters",
-    "Other",
+  String selectedType = "Clothing";
+  List<String> itemlist = [
+    "Clothing",
+    "Electronics",
+    "Home Appliances",
+    "Accessories",
+    "Books",
+    "Sports/Fitness",
+    "Beauty/Personal Care",
+    "Tools",
+    "Miscellaneous",
   ];
   late Position _currentPosition;
+
   String curaddress = "";
   String curstate = "";
   String prlat = "";
@@ -63,43 +64,70 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Insert New Catch"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                _determinePosition();
-              },
-              icon: const Icon(Icons.refresh))
-        ],
-      ),
+      appBar: AppBar(title: const Text("Insert New Item"), actions: [
+        IconButton(
+            onPressed: () {
+              _determinePosition();
+            },
+            icon: const Icon(Icons.refresh))
+      ]),
       body: Column(children: [
         Flexible(
-            flex: 4,
-            // height: screenHeight / 2.5,
-            // width: screenWidth,
-            child: GestureDetector(
-              onTap: () {
-                _selectImageDialog();
-              },
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-                child: Card(
-                  child: Container(
-                      width: screenWidth,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: _image == null
-                              ? AssetImage(pathAsset)
-                              : FileImage(_image!) as ImageProvider,
-                          fit: BoxFit.contain,
+            flex: 3,
+            child: PageView.builder(
+              itemCount: _imageList.length + 1,
+              controller: PageController(viewportFraction: 0.9),
+              itemBuilder: (BuildContext context, int index) {
+                if (index == _imageList.length) {
+                  return Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                      child: Card(
+                        shape: BeveledRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: const BorderSide(
+                                color: Colors.black, width: 2)),
+                        elevation: 20,
+                        child: GestureDetector(
+                          onTap: () {
+                            _selectImageDialog(index);
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(pathAsset),
+                              fit: BoxFit.contain,
+                            ),
+                          )),
                         ),
-                      )),
-                ),
-              ),
+                      ));
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                    child: Card(
+                      shape: BeveledRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side:
+                              const BorderSide(color: Colors.black, width: 2)),
+                      elevation: 20,
+                      child: GestureDetector(
+                        onTap: () {
+                          _selectImageDialog(index);
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: FileImage(_imageList[index]),
+                            fit: BoxFit.contain,
+                          ),
+                        )),
+                      ),
+                    ),
+                  );
+                }
+              },
             )),
         Expanded(
-          flex: 6,
+          flex: 7,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
             child: Form(
@@ -116,8 +144,6 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
                         SizedBox(
                           height: 60,
                           child: DropdownButton(
-                            //sorting dropdownoption
-                            // Not necessary for Option 1
                             value: selectedType,
                             onChanged: (newValue) {
                               setState(() {
@@ -125,7 +151,7 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
                                 print(selectedType);
                               });
                             },
-                            items: catchlist.map((selectedType) {
+                            items: itemlist.map((selectedType) {
                               return DropdownMenuItem(
                                 value: selectedType,
                                 child: Text(
@@ -135,73 +161,37 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
                             }).toList(),
                           ),
                         ),
-                        Expanded(
-                          child: TextFormField(
-                              textInputAction: TextInputAction.next,
-                              validator: (val) =>
-                                  val!.isEmpty || (val.length < 3)
-                                      ? "Catch name must be longer than 3"
-                                      : null,
-                              onFieldSubmitted: (v) {},
-                              controller: _catchnameEditingController,
-                              keyboardType: TextInputType.text,
-                              decoration: const InputDecoration(
-                                  labelText: 'Catch Name',
-                                  labelStyle: TextStyle(),
-                                  icon: Icon(Icons.abc),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(width: 2.0),
-                                  ))),
-                        )
                       ],
                     ),
-                    TextFormField(
-                        textInputAction: TextInputAction.next,
-                        validator: (val) => val!.isEmpty || (val.length < 5)
-                            ? "Catch description must be longer than 5"
-                            : null,
-                        onFieldSubmitted: (v) {},
-                        maxLines: 4,
-                        controller: _catchdescEditingController,
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                            labelText: 'Catch Description',
-                            alignLabelWithHint: true,
-                            labelStyle: TextStyle(),
-                            icon: Icon(
-                              Icons.description,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 2.0),
-                            ))),
                     Row(
                       children: [
                         Flexible(
                           flex: 5,
                           child: TextFormField(
                               textInputAction: TextInputAction.next,
-                              validator: (val) => val!.isEmpty || (val.isEmpty)
-                                  ? "Product price must contain value"
-                                  : null,
+                              validator: (val) =>
+                                  val!.isEmpty || (val.length < 3)
+                                      ? "Item name must be longer than 3"
+                                      : null,
                               onFieldSubmitted: (v) {},
-                              controller: _catchpriceEditingController,
-                              keyboardType: TextInputType.number,
+                              controller: _itemnameEditingController,
+                              keyboardType: TextInputType.text,
                               decoration: const InputDecoration(
-                                  labelText: 'Catch Price',
+                                  labelText: 'Item Name',
                                   labelStyle: TextStyle(),
-                                  icon: Icon(Icons.money),
+                                  icon: Icon(Icons.abc_sharp),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(width: 2.0),
                                   ))),
                         ),
                         Flexible(
-                          flex: 5,
+                          flex: 4,
                           child: TextFormField(
                               textInputAction: TextInputAction.next,
-                              validator: (val) => val!.isEmpty || (val.isEmpty)
+                              validator: (val) => val!.isEmpty
                                   ? "Quantity should be more than 0"
                                   : null,
-                              controller: _catchqtyEditingController,
+                              controller: _itemqtyEditingController,
                               keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
                                   labelText: 'Catch Quantity',
@@ -210,9 +200,28 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(width: 2.0),
                                   ))),
-                        ),
+                        )
                       ],
                     ),
+                    TextFormField(
+                        textInputAction: TextInputAction.next,
+                        validator: (val) => val!.isEmpty
+                            ? "Item description must be longer than 10"
+                            : null,
+                        onFieldSubmitted: (v) {},
+                        maxLines: 4,
+                        controller: _itemdescEditingController,
+                        keyboardType: TextInputType.text,
+                        decoration: const InputDecoration(
+                            labelText: 'Item Description',
+                            alignLabelWithHint: true,
+                            labelStyle: TextStyle(),
+                            icon: Icon(
+                              Icons.description,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 2.0),
+                            ))),
                     Row(children: [
                       Flexible(
                         flex: 5,
@@ -273,7 +282,7 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
     );
   }
 
-  void _selectImageDialog() {
+  void _selectImageDialog(int num) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -292,7 +301,7 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
                   child: const Text('Gallery'),
                   onPressed: () => {
                     Navigator.of(context).pop(),
-                    _selectfromGallery(),
+                    _selectfromGallery(num),
                   },
                 ),
                 ElevatedButton(
@@ -301,7 +310,7 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
                   child: const Text('Camera'),
                   onPressed: () => {
                     Navigator.of(context).pop(),
-                    _selectFromCamera(),
+                    _selectFromCamera(num),
                   },
                 ),
               ],
@@ -310,45 +319,46 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
     );
   }
 
-  Future<void> _selectfromGallery() async {
+  Future<void> _selectfromGallery(int num) async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
-      maxHeight: 800,
+      maxHeight: 1200,
       maxWidth: 800,
     );
+
     if (pickedFile != null) {
       _image = File(pickedFile.path);
-      cropImage();
+      cropImage(num);
     } else {
       print('No image selected.');
     }
   }
 
-  Future<void> _selectFromCamera() async {
+  Future<void> _selectFromCamera(int num) async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(
       source: ImageSource.camera,
-      maxHeight: 800,
+      maxHeight: 1200,
       maxWidth: 800,
     );
 
     if (pickedFile != null) {
       _image = File(pickedFile.path);
-      cropImage();
+      cropImage(num);
     } else {
       print('No image selected.');
     }
   }
 
-  Future<void> cropImage() async {
+  Future<void> cropImage(int num) async {
     CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: _image!.path,
       aspectRatioPresets: [
         // CropAspectRatioPreset.square,
         CropAspectRatioPreset.ratio3x2,
         // CropAspectRatioPreset.original,
-        // CropAspectRatioPreset.ratio4x3,
+        //CropAspectRatioPreset.ratio4x3,
         // CropAspectRatioPreset.ratio16x9
       ],
       uiSettings: [
@@ -356,7 +366,7 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
             toolbarTitle: 'Cropper',
             toolbarColor: Colors.deepOrange,
             toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.ratio4x3,
+            initAspectRatio: CropAspectRatioPreset.ratio3x2,
             lockAspectRatio: true),
         IOSUiSettings(
           title: 'Cropper',
@@ -366,10 +376,11 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
     if (croppedFile != null) {
       File imageFile = File(croppedFile.path);
       _image = imageFile;
-      int? sizeInBytes = _image?.lengthSync();
-      double sizeInMb = sizeInBytes! / (1024 * 1024);
-      print(sizeInMb);
-
+      if (_imageList.length > num) {
+        _imageList[num] = _image!;
+      } else {
+        _imageList.add(_image!);
+      }
       setState(() {});
     }
   }
@@ -377,12 +388,12 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
   void insertDialog() {
     if (!_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Check your input')));
+          .showSnackBar(const SnackBar(content: Text("Check your input")));
       return;
     }
-    if (_image == null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Check your Image')));
+    if (_imageList.length < 2) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Please take at least three pictures")));
       return;
     }
     showDialog(
@@ -404,7 +415,7 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
               ),
               onPressed: () {
                 Navigator.of(context).pop();
-                insertCatch();
+                insertItem();
               },
             ),
             TextButton(
@@ -422,27 +433,29 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
     );
   }
 
-  void insertCatch() {
-    String catchname = _catchnameEditingController.text;
-    String catchdesc = _catchdescEditingController.text;
-    String catchprice = _catchpriceEditingController.text;
-    String catchqty = _catchqtyEditingController.text;
+  void insertItem() {
+    String itemname = _itemnameEditingController.text;
+    String itemdesc = _itemdescEditingController.text;
+    String itemqty = _itemqtyEditingController.text;
     String state = _prstateEditingController.text;
     String locality = _prlocalEditingController.text;
-    String base64Image = base64Encode(_image!.readAsBytesSync());
+    List<String> base64Images = [];
+    for (int x = 0; x < _imageList.length; x++) {
+      base64Images.add(base64Encode(_imageList[x].readAsBytesSync()));
+    }
+    String images = json.encode(base64Images);
 
-    http.post(Uri.parse("${Config.server}/php/insert_catch.php"), body: {
+    http.post(Uri.parse("${MyConfig().server}/php/insert_item.php"), body: {
       "userid": widget.user.id.toString(),
-      "catchname": catchname,
-      "catchdesc": catchdesc,
-      "catchprice": catchprice,
-      "catchqty": catchqty,
+      "itemname": itemname,
+      "itemdesc": itemdesc,
+      "itemqty": itemqty,
       "type": selectedType,
       "latitude": prlat,
       "longitude": prlong,
       "state": state,
       "locality": locality,
-      "image": base64Image
+      "image": images,
     }).then((response) {
       print(response.body);
       if (response.statusCode == 200) {
@@ -450,15 +463,14 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
         if (jsondata['status'] == 'success') {
           ScaffoldMessenger.of(context)
               .showSnackBar(const SnackBar(content: Text("Insert Success")));
+          Navigator.pop(context);
         } else {
           ScaffoldMessenger.of(context)
               .showSnackBar(const SnackBar(content: Text("Insert Failed")));
         }
-        Navigator.pop(context);
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("Insert Failed")));
-        Navigator.pop(context);
       }
     });
   }
@@ -506,9 +518,8 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
         prlat = _currentPosition.latitude.toString();
         prlong = _currentPosition.longitude.toString();
       });
+      print(placemarks[0].administrativeArea.toString());
+      print(placemarks[0].locality.toString());
     }
-    print(placemarks[0].postalCode.toString());
-    print(prlong);
-    print(prlat);
   }
 }
