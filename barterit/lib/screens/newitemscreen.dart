@@ -194,7 +194,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
                               controller: _itemqtyEditingController,
                               keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
-                                  labelText: 'Catch Quantity',
+                                  labelText: 'Item Quantity',
                                   labelStyle: TextStyle(),
                                   icon: Icon(Icons.numbers),
                                   focusedBorder: OutlineInputBorder(
@@ -270,7 +270,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
                           onPressed: () {
                             insertDialog();
                           },
-                          child: const Text("Insert Catch")),
+                          child: const Text("Insert Item")),
                     )
                   ],
                 ),

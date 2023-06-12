@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+// import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -237,7 +237,7 @@ class _ItemTabScreenState extends State<ItemTabScreen> {
     http.post(Uri.parse("${MyConfig().server}/php/load_items.php"),
         body: {"userid": widget.user.id}).then((response) {
       // print(response.body);
-      log(response.body);
+      // log(response.body);
       itemList.clear();
       if (response.statusCode == 200) {
         setState(() {
@@ -313,7 +313,7 @@ class _ItemTabScreenState extends State<ItemTabScreen> {
 
   Future<void> _refresh() async {
     return Future.delayed(
-      const Duration(seconds: 1),
+      const Duration(seconds: 3),
       () {
         setState(() {
           itemList.clear();
