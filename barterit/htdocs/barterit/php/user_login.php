@@ -23,7 +23,7 @@
 			$userarray['name'] = $row['user_name'];
 			$userarray['password'] = $_POST['password'];
 			$userarray['otp'] = $row['user_otp'];
-			$userarray['regdate'] = $row['user_datereg'];
+			$userarray['datereg'] = $row['user_datereg'];
 			$response = array('status' => 'success', 'data' => $userarray);
 			sendJsonResponse($response);
 		}

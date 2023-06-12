@@ -1,5 +1,6 @@
 <?php
-	if (!isset($_POST)) {
+	if (!isset($_POST)) 
+	{
 		$response = array('status' => 'failed', 'data' => null);
 		sendJsonResponse($response);
 		die();
