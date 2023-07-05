@@ -22,6 +22,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   int numofpage = 1, curpage = 1;
   int numberofresult = 0;
   late int axiscount = 2;
+  // ignore: prefer_typing_uninitialized_variables
   var color;
   List<Item> itemList = <Item>[];
   TextEditingController searchController = TextEditingController();
