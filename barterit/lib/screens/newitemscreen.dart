@@ -30,6 +30,8 @@ class _NewItemScreenState extends State<NewItemScreen> {
       TextEditingController();
   final TextEditingController _itemqtyEditingController =
       TextEditingController();
+  final TextEditingController _itempriceEditingController =
+      TextEditingController();
   final TextEditingController _prstateEditingController =
       TextEditingController();
   final TextEditingController _prlocalEditingController =
@@ -163,46 +165,21 @@ class _NewItemScreenState extends State<NewItemScreen> {
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Flexible(
-                          flex: 5,
-                          child: TextFormField(
-                              textInputAction: TextInputAction.next,
-                              validator: (val) =>
-                                  val!.isEmpty || (val.length < 3)
-                                      ? "Item name must be longer than 3"
-                                      : null,
-                              onFieldSubmitted: (v) {},
-                              controller: _itemnameEditingController,
-                              keyboardType: TextInputType.text,
-                              decoration: const InputDecoration(
-                                  labelText: 'Item Name',
-                                  labelStyle: TextStyle(),
-                                  icon: Icon(Icons.abc_sharp),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(width: 2.0),
-                                  ))),
-                        ),
-                        Flexible(
-                          flex: 4,
-                          child: TextFormField(
-                              textInputAction: TextInputAction.next,
-                              validator: (val) => val!.isEmpty
-                                  ? "Quantity should be more than 0"
-                                  : null,
-                              controller: _itemqtyEditingController,
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                  labelText: 'Item Quantity',
-                                  labelStyle: TextStyle(),
-                                  icon: Icon(Icons.numbers),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(width: 2.0),
-                                  ))),
-                        )
-                      ],
-                    ),
+                    TextFormField(
+                        textInputAction: TextInputAction.next,
+                        validator: (val) => val!.isEmpty || (val.length < 3)
+                            ? "Item name must be longer than 3"
+                            : null,
+                        onFieldSubmitted: (v) {},
+                        controller: _itemnameEditingController,
+                        keyboardType: TextInputType.text,
+                        decoration: const InputDecoration(
+                            labelText: 'Item Name',
+                            labelStyle: TextStyle(),
+                            icon: Icon(Icons.abc_sharp),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 2.0),
+                            ))),
                     TextFormField(
                         textInputAction: TextInputAction.next,
                         validator: (val) => val!.isEmpty
@@ -222,6 +199,45 @@ class _NewItemScreenState extends State<NewItemScreen> {
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(width: 2.0),
                             ))),
+                    Row(
+                      children: [
+                        Flexible(
+                          flex: 5,
+                          child: TextFormField(
+                              textInputAction: TextInputAction.next,
+                              validator: (val) => val!.isEmpty
+                                  ? "Product price must contain value"
+                                  : null,
+                              onFieldSubmitted: (v) {},
+                              controller: _itempriceEditingController,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                  labelText: 'Item Price',
+                                  labelStyle: TextStyle(),
+                                  icon: Icon(Icons.attach_money_rounded),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(width: 2.0),
+                                  ))),
+                        ),
+                        Flexible(
+                          flex: 5,
+                          child: TextFormField(
+                              textInputAction: TextInputAction.next,
+                              validator: (val) => val!.isEmpty
+                                  ? "Quantity should be more than 0"
+                                  : null,
+                              controller: _itemqtyEditingController,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                  labelText: 'Item Quantity',
+                                  labelStyle: TextStyle(),
+                                  icon: Icon(Icons.numbers),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(width: 2.0),
+                                  ))),
+                        ),
+                      ],
+                    ),
                     Row(children: [
                       Flexible(
                         flex: 5,
@@ -437,6 +453,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
     String itemname = _itemnameEditingController.text;
     String itemdesc = _itemdescEditingController.text;
     String itemqty = _itemqtyEditingController.text;
+    String itemprice = _itempriceEditingController.text;
     String state = _prstateEditingController.text;
     String locality = _prlocalEditingController.text;
     List<String> base64Images = [];
@@ -450,6 +467,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
       "itemname": itemname,
       "itemdesc": itemdesc,
       "itemqty": itemqty,
+      "itemprice": itemprice,
       "type": selectedType,
       "latitude": prlat,
       "longitude": prlong,
@@ -518,8 +536,8 @@ class _NewItemScreenState extends State<NewItemScreen> {
         prlat = _currentPosition.latitude.toString();
         prlong = _currentPosition.longitude.toString();
       });
-      print(placemarks[0].administrativeArea.toString());
-      print(placemarks[0].locality.toString());
+      // print(placemarks[0].administrativeArea.toString());
+      // print(placemarks[0].locality.toString());
     }
   }
 }

@@ -15,7 +15,7 @@ class _NewsTabScreenState extends State<NewsTabScreen> {
     super.initState();
     print('News');
   }
-  
+
   @override
   void dispose() {
     super.dispose();
@@ -24,7 +24,10 @@ class _NewsTabScreenState extends State<NewsTabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(maintitle));
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(maintitle),
+        ),
+        body: Center(child: Text(maintitle)));
   }
 }

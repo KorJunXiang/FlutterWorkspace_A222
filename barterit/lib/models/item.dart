@@ -5,6 +5,7 @@ class Item {
   String? itemType;
   String? itemDesc;
   String? itemQty;
+  String? itemPrice;
   String? itemLat;
   String? itemLong;
   String? itemState;
@@ -18,6 +19,7 @@ class Item {
       this.itemType,
       this.itemDesc,
       this.itemQty,
+      this.itemPrice,
       this.itemLat,
       this.itemLong,
       this.itemState,
@@ -31,6 +33,7 @@ class Item {
     itemType = json['item_type'];
     itemDesc = json['item_desc'];
     itemQty = json['item_qty'];
+    itemPrice = json['item_price'];
     itemLat = json['item_lat'];
     itemLong = json['item_long'];
     itemState = json['item_state'];
@@ -46,6 +49,7 @@ class Item {
     data['item_type'] = itemType;
     data['item_desc'] = itemDesc;
     data['item_qty'] = itemQty;
+    data['item_price'] = itemPrice;
     data['item_lat'] = itemLat;
     data['item_long'] = itemLong;
     data['item_state'] = itemState;

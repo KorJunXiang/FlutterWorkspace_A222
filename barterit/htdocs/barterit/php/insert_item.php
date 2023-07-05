@@ -12,6 +12,7 @@
 	$item_name = $_POST['itemname'];
 	$item_desc = $_POST['itemdesc'];
 	$item_qty = $_POST['itemqty'];
+	$item_price = $_POST['itemprice'];
 	$item_type = $_POST['type'];
 	$latitude = $_POST['latitude'];
 	$longitude = $_POST['longitude'];
@@ -20,7 +21,7 @@
 	$imageItems = $_POST["image"];
 	$image = json_decode($imageItems);
 
-	$sqlinsert = "INSERT INTO items_tbl(user_id, item_name, item_qty, item_desc, item_type, item_state, item_locality, item_lat, item_long) VALUES ('$userid','$item_name','$item_qty','$item_desc','$item_type','$state','$locality','$latitude','$longitude')";
+	$sqlinsert = "INSERT INTO items_tbl(user_id, item_name, item_qty, item_desc, item_price, item_type, item_state, item_locality, item_lat, item_long) VALUES ('$userid','$item_name','$item_qty','$item_desc','$item_price', '$item_type','$state','$locality','$latitude','$longitude')";
 	
 	try
 	{

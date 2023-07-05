@@ -450,11 +450,11 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
         if (jsondata['status'] == 'success') {
           ScaffoldMessenger.of(context)
               .showSnackBar(const SnackBar(content: Text("Insert Success")));
+          Navigator.pop(context);
         } else {
           ScaffoldMessenger.of(context)
               .showSnackBar(const SnackBar(content: Text("Insert Failed")));
         }
-        Navigator.pop(context);
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("Insert Failed")));
@@ -507,8 +507,5 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
         prlong = _currentPosition.longitude.toString();
       });
     }
-    print(placemarks[0].postalCode.toString());
-    print(prlong);
-    print(prlat);
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mynelayan/config.dart';
 import 'package:mynelayan/models/catch.dart';
 import 'package:mynelayan/models/user.dart';
+import 'package:mynelayan/screens/editcatchscreen.dart';
 import 'package:mynelayan/screens/newcatchscreen.dart';
 import 'package:http/http.dart' as http;
 
@@ -46,6 +47,9 @@ class _SellerTabScreenState extends State<SellerTabScreen> {
       axiscount = 2;
     }
     return Scaffold(
+      appBar: AppBar(
+        title: Text(maintitle),
+      ),
       body: catchList.isEmpty
           ? const Center(
               child: Text("No Data"),
@@ -53,7 +57,7 @@ class _SellerTabScreenState extends State<SellerTabScreen> {
           : Column(children: [
               Container(
                 height: 24,
-                color: Colors.red,
+                color: Theme.of(context).colorScheme.primary,
                 alignment: Alignment.center,
                 child: Text(
                   "${catchList.length} Catch Found",
@@ -71,10 +75,23 @@ class _SellerTabScreenState extends State<SellerTabScreen> {
                               onLongPress: () {
                                 onDeleteDialog(index);
                               },
+                              onTap: () async {
+                                Catch singlecatch =
+                                    Catch.fromJson(catchList[index].toJson());
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditCatchScreen(
+                                          user: widget.user,
+                                          usercatch: singlecatch),
+                                    ));
+                                loadsellerCatches();
+                              },
                               child: Column(children: [
                                 CachedNetworkImage(
                                   width: screenWidth,
-                                  fit: BoxFit.cover,
+                                  height: 111,
+                                  fit: BoxFit.fill,
                                   imageUrl:
                                       "${Config.server}/assets/catches/${catchList[index].catchId}.png",
                                   placeholder: (context, url) =>
@@ -101,9 +118,9 @@ class _SellerTabScreenState extends State<SellerTabScreen> {
                       )))
             ]),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           if (widget.user.id != 'na') {
-            Navigator.push(
+            await Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => NewCatchScreen(
@@ -142,15 +159,15 @@ class _SellerTabScreenState extends State<SellerTabScreen> {
       // log(response.body);
       catchList.clear();
       if (response.statusCode == 200) {
-        setState(() {
-          var jsondata = jsonDecode(response.body);
-          if (jsondata['status'] == "success") {
-            var extractdata = jsondata['data'];
-            extractdata['catches'].forEach((v) {
-              catchList.add(Catch.fromJson(v));
-            });
-          }
-        });
+        var jsondata = jsonDecode(response.body);
+        if (jsondata['status'] == "success") {
+          var extractdata = jsondata['data'];
+          extractdata['catches'].forEach((v) {
+            catchList.add(Catch.fromJson(v));
+          });
+          print(catchList[0].catchName);
+        }
+        setState(() {});
       }
     });
   }

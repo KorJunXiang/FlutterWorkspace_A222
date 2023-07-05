@@ -32,27 +32,12 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.black,
-        backgroundColor: Colors.deepPurple.shade400,
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/user.png',
-              scale: 12,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Text(
-              maintitle,
-              style: const TextStyle(
-                  fontSize: 26, fontFamily: 'Merriweather.italic'),
-            )
-          ],
-        ),
-      ),
+          automaticallyImplyLeading: false,
+          title: Text(
+            maintitle,
+            style: const TextStyle(
+                fontSize: 26, fontFamily: 'Merriweather.italic'),
+          )),
       body: Center(
         child: Column(
           children: [
@@ -60,8 +45,8 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
               padding: const EdgeInsets.all(8),
               height: screenHeight * 0.3,
               width: screenWidth,
-              color: Colors.cyan.shade100,
               child: Card(
+                color: Colors.lightBlue.shade50,
                 elevation: 10,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -112,11 +97,12 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
               margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
               width: screenWidth,
               alignment: Alignment.center,
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.primary,
               child: const Padding(
                 padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
                 child: Text("PROFILE SETTINGS",
                     style: TextStyle(
+                      color: Colors.white,
                       fontSize: 20,
                       fontFamily: 'Merriweather.italic',
                     )),
@@ -126,98 +112,98 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
                 children: [
-              OutlinedButton(
-                style: ButtonStyle(
-                    side: MaterialStateProperty.all(const BorderSide(
-                  color: Colors.orange,
-                  width: 3,
-                ))),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (content) => const LoginScreen()));
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "LOGIN",
-                      style: TextStyle(
-                          fontFamily: 'Merriweather',
-                          fontSize: 18,
-                          color: Colors.black),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        side: MaterialStateProperty.all(const BorderSide(
+                      color: Colors.orange,
+                      width: 3,
+                    ))),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (content) => const LoginScreen()));
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "LOGIN",
+                          style: TextStyle(
+                              fontFamily: 'Merriweather',
+                              fontSize: 18,
+                              color: Colors.black),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
+                          Icons.login,
+                          color: Colors.black,
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      width: 10,
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        side: MaterialStateProperty.all(const BorderSide(
+                      color: Colors.orange,
+                      width: 3,
+                    ))),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (content) =>
+                                  const RegistrationScreen()));
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "REGISTRATION",
+                          style: TextStyle(
+                              fontFamily: 'Merriweather',
+                              fontSize: 18,
+                              color: Colors.black),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
+                          Icons.app_registration,
+                          color: Colors.black,
+                        )
+                      ],
                     ),
-                    Icon(
-                      Icons.login,
-                      color: Colors.black,
-                    )
-                  ],
-                ),
-              ),
-              OutlinedButton(
-                style: ButtonStyle(
-                    side: MaterialStateProperty.all(const BorderSide(
-                  color: Colors.orange,
-                  width: 3,
-                ))),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (content) =>
-                              const RegistrationScreen()));
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "REGISTRATION",
-                      style: TextStyle(
-                          fontFamily: 'Merriweather',
-                          fontSize: 18,
-                          color: Colors.black),
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        side: MaterialStateProperty.all(const BorderSide(
+                      color: Colors.orange,
+                      width: 3,
+                    ))),
+                    onPressed: _logout,
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "LOGOUT",
+                          style: TextStyle(
+                              fontFamily: 'Merriweather',
+                              fontSize: 18,
+                              color: Colors.black),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
+                          Icons.logout,
+                          color: Colors.black,
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Icon(
-                      Icons.app_registration,
-                      color: Colors.black,
-                    )
-                  ],
-                ),
-              ),
-              OutlinedButton(
-                style: ButtonStyle(
-                    side: MaterialStateProperty.all(const BorderSide(
-                  color: Colors.orange,
-                  width: 3,
-                ))),
-                onPressed: _logout,
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "LOGOUT",
-                      style: TextStyle(
-                          fontFamily: 'Merriweather',
-                          fontSize: 18,
-                          color: Colors.black),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Icon(
-                      Icons.logout,
-                      color: Colors.black,
-                    )
-                  ],
-                ),
-              ),
+                  ),
                 ],
               ),
             )
