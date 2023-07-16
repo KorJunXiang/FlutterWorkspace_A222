@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:lab_assignment_2/models/user.dart';
-import 'package:lab_assignment_2/screens/homescreen.dart';
-import 'package:lab_assignment_2/screens/itemtabscreen.dart';
-import 'package:lab_assignment_2/screens/messagetabscreen.dart';
-import 'package:lab_assignment_2/screens/profiletabscreen.dart';
+import 'package:mynelayan/models/user.dart';
+import 'package:mynelayan/buyer/buyertabscreen.dart';
+import 'package:mynelayan/shared/newstabscreen.dart';
+import 'package:mynelayan/shared/profiletabscreen.dart';
+import 'package:mynelayan/seller/sellertabscreen.dart';
 
 class MainScreen extends StatefulWidget {
   final User user;
+
   const MainScreen({super.key, required this.user});
 
   @override
@@ -16,71 +17,79 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   late List<Widget> tabchildren;
   int _currentIndex = 0;
-  String maintitle = 'Home';
+  String maintitle = "Buyer";
 
   @override
   void initState() {
     super.initState();
+    print('MainScreen');
     tabchildren = [
-      HomeTabScreen(user: widget.user),
-      ItemTabScreen(user: widget.user),
-      const MessageTabScreen(),
-      ProfileTabScreen(user: widget.user)
+      BuyerTabScreen(user: widget.user),
+      SellerTabScreen(
+        user: widget.user,
+      ),
+      ProfileTabScreen(user: widget.user),
+      const NewsTabScreen(),
     ];
   }
 
   @override
   void dispose() {
     super.dispose();
+    print('dispose');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: tabchildren[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
+        // appBar: AppBar(
+        //   title: Text(maintitle),
+        //   automaticallyImplyLeading: false,
+        // ),
+        body: tabchildren[_currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
           onTap: onTabTapped,
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,
           items: const [
             BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.home,
+                  Icons.attach_money,
                 ),
-                label: "Home"),
+                label: "Buyer"),
             BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.change_circle,
+                  Icons.store_mall_directory,
                 ),
-                label: "Item"),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.message,
-                ),
-                label: "Message"),
+                label: "Seller"),
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.person,
                 ),
                 label: "Profile"),
-          ]),
-    );
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.newspaper,
+                ),
+                label: "News")
+          ],
+        ));
   }
 
-  void onTabTapped(int value) {
+  void onTabTapped(int index) {
     setState(() {
-      _currentIndex = value;
+      _currentIndex = index;
       if (_currentIndex == 0) {
-        maintitle = "Home";
+        maintitle = "Buyer";
       }
       if (_currentIndex == 1) {
-        maintitle = "Item";
+        maintitle = "Seller";
       }
       if (_currentIndex == 2) {
-        maintitle = "Message";
+        maintitle = "Profile";
       }
       if (_currentIndex == 3) {
-        maintitle = "Profile";
+        maintitle = "News";
       }
     });
   }

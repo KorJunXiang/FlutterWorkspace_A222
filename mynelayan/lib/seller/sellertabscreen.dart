@@ -2,11 +2,11 @@ import 'dart:convert';
 // import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:mynelayan/config.dart';
+import 'package:mynelayan/appconfig/config.dart';
 import 'package:mynelayan/models/catch.dart';
 import 'package:mynelayan/models/user.dart';
-import 'package:mynelayan/screens/editcatchscreen.dart';
-import 'package:mynelayan/screens/newcatchscreen.dart';
+import 'package:mynelayan/seller/editcatchscreen.dart';
+import 'package:mynelayan/seller/newcatchscreen.dart';
 import 'package:http/http.dart' as http;
 
 class SellerTabScreen extends StatefulWidget {
@@ -93,7 +93,7 @@ class _SellerTabScreenState extends State<SellerTabScreen> {
                                   height: 111,
                                   fit: BoxFit.fill,
                                   imageUrl:
-                                      "${Config.server}/assets/catches/${catchList[index].catchId}.png",
+                                      "${MyConfig.server}/assets/catches/${catchList[index].catchId}.png",
                                   placeholder: (context, url) =>
                                       const LinearProgressIndicator(),
                                   errorWidget: (context, url, error) =>
@@ -153,7 +153,7 @@ class _SellerTabScreenState extends State<SellerTabScreen> {
       return;
     }
 
-    http.post(Uri.parse("${Config.server}/php/load_catches.php"),
+    http.post(Uri.parse("${MyConfig.server}/php/load_catches.php"),
         body: {"userid": widget.user.id}).then((response) {
       // print(response.body);
       // log(response.body);
@@ -210,7 +210,7 @@ class _SellerTabScreenState extends State<SellerTabScreen> {
   }
 
   void deleteCatch(int index) {
-    http.post(Uri.parse("${Config.server}/php/delete_catch.php"), body: {
+    http.post(Uri.parse("${MyConfig.server}/php/delete_catch.php"), body: {
       "userid": widget.user.id,
       "catchid": catchList[index].catchId
     }).then((response) {

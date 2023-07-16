@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lab_assignment_2/models/user.dart';
-import 'package:lab_assignment_2/screens/loginscreen.dart';
-import 'package:lab_assignment_2/screens/registrationscreen.dart';
+import 'package:lab_assignment_2/shared/loginscreen.dart';
+import 'package:lab_assignment_2/shared/registrationscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileTabScreen extends StatefulWidget {
@@ -226,6 +226,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
       widget.user.password = "na";
       widget.user.otp = "na";
     });
+    // ignore: use_build_context_synchronously
     Navigator.push(
         context, MaterialPageRoute(builder: (content) => const LoginScreen()));
   }

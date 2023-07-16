@@ -1,118 +1,65 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lab_assignment_2/models/item.dart';
-import 'package:lab_assignment_2/models/user.dart';
-import 'package:lab_assignment_2/myconfig.dart';
+import 'package:mynelayan/appconfig/config.dart';
+import 'package:mynelayan/models/catch.dart';
+import 'package:mynelayan/models/user.dart';
+import 'package:http/http.dart' as http;
 
-class ItemDetailScreen extends StatefulWidget {
+class BuyerDetailsScreen extends StatefulWidget {
+  final Catch usercatch;
   final User user;
-  final Item item;
-
-  const ItemDetailScreen({super.key, required this.user, required this.item});
+  const BuyerDetailsScreen(
+      {super.key, required this.usercatch, required this.user});
 
   @override
-  State<ItemDetailScreen> createState() => _ItemDetailScreenState();
+  State<BuyerDetailsScreen> createState() => _BuyerDetailsScreenState();
 }
 
-class _ItemDetailScreenState extends State<ItemDetailScreen> {
+class _BuyerDetailsScreenState extends State<BuyerDetailsScreen> {
   int qty = 0;
   int userqty = 1;
   double totalprice = 0.0;
   double singleprice = 0.0;
-  final df = DateFormat('dd-MM-yyyy hh:mm a');
-  late double screenHeight, screenWidth, cardwitdh;
 
   @override
   void initState() {
     super.initState();
-    qty = int.parse(widget.item.itemQty.toString());
-    totalprice = double.parse(widget.item.itemPrice.toString());
-    singleprice = double.parse(widget.item.itemPrice.toString());
+    qty = int.parse(widget.usercatch.catchQty.toString());
+    totalprice = double.parse(widget.usercatch.catchPrice.toString());
+    singleprice = double.parse(widget.usercatch.catchPrice.toString());
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  final df = DateFormat('dd-MM-yyyy hh:mm a');
 
+  late double screenHeight, screenWidth, cardwitdh;
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-          title: const Text(
-        "Item Details",
-        style: TextStyle(fontFamily: 'Merriweather'),
-      )),
+      appBar: AppBar(title: const Text("Catch Details")),
       body: Column(children: [
         Flexible(
             flex: 4,
+            // height: screenHeight / 2.5,
+            // width: screenWidth,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
               child: Card(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      Container(
-                        width: screenWidth * 0.9,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 2.0,
-                          ),
-                        ),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl:
-                              "${MyConfig().server}/assets/items/${widget.item.itemId}_1.png",
-                          placeholder: (context, url) =>
-                              const LinearProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Container(
-                        width: screenWidth * 0.9,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 2.0,
-                          ),
-                        ),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl:
-                              "${MyConfig().server}/assets/items/${widget.item.itemId}_2.png",
-                          placeholder: (context, url) =>
-                              const LinearProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Container(
-                        width: screenWidth * 0.9,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 2.0,
-                          ),
-                        ),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl:
-                              "${MyConfig().server}/assets/items/${widget.item.itemId}_3.png",
-                          placeholder: (context, url) =>
-                              const LinearProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
-                      ),
-                    ],
+                child: Container(
+                  width: screenWidth,
+                  child: CachedNetworkImage(
+                    width: screenWidth,
+                    fit: BoxFit.cover,
+                    imageUrl:
+                        "${MyConfig.server}/assets/catches/${widget.usercatch.catchId}.png",
+                    placeholder: (context, url) =>
+                        const LinearProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
                 ),
               ),
@@ -120,15 +67,12 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         Container(
             padding: const EdgeInsets.all(8),
             child: Text(
-              widget.item.itemName.toString(),
-              style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Merriweather'),
+              widget.usercatch.catchName.toString(),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             )),
         Expanded(
           child: Container(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
             child: Table(
               columnWidths: const {
                 0: FlexColumnWidth(4),
@@ -144,33 +88,33 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   ),
                   TableCell(
                     child: Text(
-                      widget.item.itemDesc.toString(),
+                      widget.usercatch.catchDesc.toString(),
                     ),
                   )
                 ]),
                 TableRow(children: [
                   const TableCell(
                     child: Text(
-                      "Item Type",
+                      "Catch Type",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                   TableCell(
                     child: Text(
-                      widget.item.itemType.toString(),
+                      widget.usercatch.catchType.toString(),
                     ),
                   )
                 ]),
                 TableRow(children: [
                   const TableCell(
                     child: Text(
-                      "Quantity",
+                      "Quantity Available",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                   TableCell(
                     child: Text(
-                      widget.item.itemQty.toString(),
+                      widget.usercatch.catchQty.toString(),
                     ),
                   )
                 ]),
@@ -183,7 +127,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   ),
                   TableCell(
                     child: Text(
-                      "RM ${double.parse(widget.item.itemPrice.toString()).toStringAsFixed(2)}",
+                      "RM ${double.parse(widget.usercatch.catchPrice.toString()).toStringAsFixed(2)}",
                     ),
                   )
                 ]),
@@ -196,7 +140,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   ),
                   TableCell(
                     child: Text(
-                      "${widget.item.itemLocality}/${widget.item.itemState}",
+                      "${widget.usercatch.catchLocality}/${widget.usercatch.catchState}",
                     ),
                   )
                 ]),
@@ -209,8 +153,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   ),
                   TableCell(
                     child: Text(
-                      df.format(
-                          DateTime.parse(widget.item.itemDate.toString())),
+                      df.format(DateTime.parse(
+                          widget.usercatch.catchDate.toString())),
                     ),
                   )
                 ]),
@@ -218,7 +162,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 30),
         Container(
           padding: const EdgeInsets.all(8),
           child:
@@ -259,10 +202,81 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         ),
         ElevatedButton(
             onPressed: () {
-              // addtocartdialog();
+              addtocartdialog();
             },
             child: const Text("Add to Cart"))
       ]),
     );
+  }
+
+  void addtocartdialog() {
+    if (widget.user.id.toString() == widget.usercatch.userId.toString()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("User cannot add own item")));
+      return;
+    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0))),
+          title: const Text(
+            "Add to cart?",
+            style: TextStyle(),
+          ),
+          content: const Text("Are you sure?", style: TextStyle()),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                "Yes",
+                style: TextStyle(),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                addtocart();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                "No",
+                style: TextStyle(),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+//`cart_id`, `catch_id`, `cart_qty`, `cart_price`, `user_id`, `buyer_id`, `cart_date`
+  void addtocart() {
+    http.post(Uri.parse("${MyConfig.server}/php/addtocart.php"), body: {
+      "catch_id": widget.usercatch.catchId.toString(),
+      "cart_qty": userqty.toString(),
+      "cart_price": totalprice.toString(),
+      "userid": widget.user.id,
+      "sellerid": widget.usercatch.userId
+    }).then((response) {
+      print(response.body);
+      if (response.statusCode == 200) {
+        var jsondata = jsonDecode(response.body);
+        if (jsondata['status'] == 'success') {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Success")));
+        } else {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Failed")));
+        }
+        Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Failed")));
+        Navigator.pop(context);
+      }
+    });
   }
 }

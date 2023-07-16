@@ -2,11 +2,11 @@ import 'dart:convert';
 // import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lab_assignment_2/appconfig/myconfig.dart';
 import 'package:lab_assignment_2/models/item.dart';
 import 'package:lab_assignment_2/models/user.dart';
-import 'package:lab_assignment_2/myconfig.dart';
 import 'package:http/http.dart' as http;
-import 'package:lab_assignment_2/screens/itemdetailscreen.dart';
+import 'package:lab_assignment_2/home/itemdetailscreen.dart';
 
 class HomeTabScreen extends StatefulWidget {
   final User user;

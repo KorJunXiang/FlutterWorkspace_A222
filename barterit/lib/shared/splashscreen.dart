@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'config.dart';
-import 'models/user.dart';
-import 'package:mynelayan/screens/mainscreen.dart';
+import 'package:lab_assignment_2/appconfig/myconfig.dart';
+import 'package:lab_assignment_2/models/user.dart';
+import 'package:lab_assignment_2/shared/mainscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,40 +24,44 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/boat.jpg'),
-                      fit: BoxFit.cover))),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(0, 50, 0, 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "MY NELAYAN",
-                  style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-                CircularProgressIndicator(),
-                Text(
-                  "Version 0.1",
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+        backgroundColor: const Color.fromARGB(255, 214, 209, 214),
+        body: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/splashscreen.png'),
+                        scale: 2,
+                        alignment: Alignment.center))),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 150, 0, 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "BARTER IT",
+                    style: TextStyle(
+                        fontSize: 50,
+                        fontFamily: 'Merriweather.italic',
+                        color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  CircularProgressIndicator(),
+                  Text(
+                    "Version 0.1",
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontFamily: 'Merriweather',
+                        color: Colors.black),
+                  )
+                ],
+              ),
+            )
+          ],
+        ));
   }
 
   checkAndLogin() async {
@@ -68,11 +72,13 @@ class _SplashScreenState extends State<SplashScreen> {
     late User user;
     if (ischeck) {
       try {
-        print('yes');
-        http.post(Uri.parse("${Config.server}/php/login_user.php"),
+        print('isCheck');
+        http.post(Uri.parse("${MyConfig().server}/php/user_login.php"),
             body: {"email": email, "password": password}).then((response) {
           if (response.statusCode == 200) {
+            print('User Data Founded');
             var jsondata = jsonDecode(response.body);
+            print(jsondata);
             user = User.fromJson(jsondata['data']);
             Timer(
                 const Duration(seconds: 3),
@@ -81,11 +87,11 @@ class _SplashScreenState extends State<SplashScreen> {
                     MaterialPageRoute(
                         builder: (content) => MainScreen(user: user))));
           } else {
+            print('No Data Found');
             user = User(
                 id: "na",
                 name: "na",
                 email: "na",
-                phone: "na",
                 datereg: "na",
                 password: "na",
                 otp: "na");
@@ -96,19 +102,16 @@ class _SplashScreenState extends State<SplashScreen> {
                     MaterialPageRoute(
                         builder: (content) => MainScreen(user: user))));
           }
-        }).timeout(const Duration(seconds: 5), onTimeout: () {
-          // Time has run out, do what you wanted to do.
-        });
+        }).timeout(const Duration(seconds: 5), onTimeout: () {});
       } on TimeoutException catch (_) {
         print("Time out");
       }
     } else {
-      print('no');
+      print('isNotCheck');
       user = User(
           id: "na",
           name: "na",
           email: "na",
-          phone: "na",
           datereg: "na",
           password: "na",
           otp: "na");

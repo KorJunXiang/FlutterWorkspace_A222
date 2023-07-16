@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:mynelayan/config.dart';
+import 'package:mynelayan/appconfig/config.dart';
 import 'package:mynelayan/models/cart.dart';
 import 'package:mynelayan/models/user.dart';
 import 'package:http/http.dart' as http;
@@ -53,7 +53,7 @@ class _BuyerCartScreenState extends State<BuyerCartScreen> {
                                 width: screenWidth / 3,
                                 fit: BoxFit.cover,
                                 imageUrl:
-                                    "${Config.server}/mynelayan/assets/catches/${cartList[index].catchId}.png",
+                                    "${MyConfig.server}/mynelayan/assets/catches/${cartList[index].catchId}.png",
                                 placeholder: (context, url) =>
                                     const LinearProgressIndicator(),
                                 errorWidget: (context, url, error) =>
@@ -117,7 +117,7 @@ class _BuyerCartScreenState extends State<BuyerCartScreen> {
   }
 
   void loadcart() {
-    http.post(Uri.parse("${Config.server}/mynelayan/php/load_cart.php"), body: {
+    http.post(Uri.parse("${MyConfig.server}/mynelayan/php/load_cart.php"), body: {
       "userid": widget.user.id,
     }).then((response) {
       print(response.body);

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:mynelayan/config.dart';
-import 'package:mynelayan/screens/loginscreen.dart';
+import 'package:mynelayan/appconfig/config.dart';
+import 'package:mynelayan/shared/loginscreen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -245,7 +245,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     String email = _emailEditingController.text;
     String phone = _phoneEditingController.text;
     String pass1 = _pass1EditingController.text;
-    http.post(Uri.parse('${Config.server}/php/register_user.php'), body: {
+    http.post(Uri.parse('${MyConfig.server}/php/register_user.php'), body: {
       "name": name,
       "phone": phone,
       "email": email,

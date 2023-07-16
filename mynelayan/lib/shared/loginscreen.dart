@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:lab_assignment_2/models/user.dart';
-import 'package:lab_assignment_2/myconfig.dart';
-import 'package:lab_assignment_2/screens/mainscreen.dart';
-import 'package:lab_assignment_2/screens/registrationscreen.dart';
+import 'package:mynelayan/models/user.dart';
+import 'package:mynelayan/shared/mainscreen.dart';
+import 'package:mynelayan/shared/registrationscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:mynelayan/appconfig/config.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,10 +17,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailEditingController = TextEditingController();
   final TextEditingController _passEditingController = TextEditingController();
-  late double screenHeight, screenWidth;
-  final _formKey = GlobalKey<FormState>();
+  final _formkey = GlobalKey<FormState>();
+  late double screenHeight, screenWidth, cardwitdh;
   bool _isChecked = false;
-  bool _passwordVisible = true;
 
   @override
   void initState() {
@@ -35,10 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Login",
-          style: TextStyle(fontFamily: 'Merriweather'),
-        ),
+        title: const Text("Login"),
         backgroundColor: Colors.transparent,
         foregroundColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,
@@ -51,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
               width: screenWidth,
               child: Image.asset(
                 "assets/images/login.png",
-                fit: BoxFit.contain,
+                fit: BoxFit.cover,
               )),
           const SizedBox(
             height: 5,
@@ -61,10 +56,10 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Card(
               elevation: 8,
               child: Container(
-                padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
                 child: Column(children: [
                   Form(
-                    key: _formKey,
+                    key: _formkey,
                     child: Column(children: [
                       TextFormField(
                           controller: _emailEditingController,
@@ -76,33 +71,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(
                               labelText: 'Email',
-                              labelStyle: TextStyle(fontFamily: 'Merriweather'),
+                              labelStyle: TextStyle(),
                               icon: Icon(Icons.email),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(width: 2.0),
                               ))),
                       TextFormField(
                           controller: _passEditingController,
-                          validator: (val) =>
-                              val!.isEmpty ? "enter your password" : null,
-                          obscureText: _passwordVisible,
-                          decoration: InputDecoration(
+                          validator: (val) => val!.isEmpty || (val.length < 5)
+                              ? "password must be longer than 5"
+                              : null,
+                          obscureText: true,
+                          decoration: const InputDecoration(
                               labelText: 'Password',
-                              labelStyle:
-                                  const TextStyle(fontFamily: 'Merriweather'),
-                              icon: const Icon(Icons.lock),
-                              suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _passwordVisible = !_passwordVisible;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    _passwordVisible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                  )),
-                              focusedBorder: const OutlineInputBorder(
+                              labelStyle: TextStyle(),
+                              icon: Icon(Icons.lock),
+                              focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(width: 2.0),
                               ))),
                       const SizedBox(
@@ -132,18 +116,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           MaterialButton(
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0)),
+                                borderRadius: BorderRadius.circular(5.0)),
                             minWidth: screenWidth / 3,
                             height: 50,
                             elevation: 10,
-                            onPressed: onLogin,
+                            onPressed: _loginuser,
                             color: Theme.of(context).colorScheme.primary,
                             textColor: Theme.of(context).colorScheme.onError,
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(
-                                  fontFamily: 'Merriweather', fontSize: 16),
-                            ),
+                            child: const Text('Login'),
                           ),
                         ],
                       ),
@@ -163,7 +143,9 @@ class _LoginScreenState extends State<LoginScreen> {
             onTap: _goToRegister,
             child: const Text(
               "New account?",
-              style: TextStyle(fontSize: 18, fontFamily: 'Merriweather'),
+              style: TextStyle(
+                fontSize: 18,
+              ),
             ),
           ),
           const SizedBox(
@@ -173,7 +155,9 @@ class _LoginScreenState extends State<LoginScreen> {
             onTap: _forgotDialog,
             child: const Text(
               "Forgot Password?",
-              style: TextStyle(fontSize: 18, fontFamily: 'Merriweather'),
+              style: TextStyle(
+                fontSize: 18,
+              ),
             ),
           ),
         ],
@@ -181,15 +165,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _forgotDialog() {}
-
-  void _goToRegister() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (content) => const RegistrationScreen()));
-  }
-
-  void onLogin() {
-    if (!_formKey.currentState!.validate()) {
+  void _loginuser() {
+    if (!_formkey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
             'Check your input',
@@ -201,15 +178,21 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     String email = _emailEditingController.text;
     String password = _passEditingController.text;
-    http.post(Uri.parse("${MyConfig().server}/php/user_login.php"),
+    http.post(Uri.parse("${MyConfig.server}/php/login_user.php"),
         body: {"email": email, "password": password}).then((response) {
       print(response.body);
       if (response.statusCode == 200) {
         var jsondata = jsonDecode(response.body);
+        print(jsondata);  
         if (jsondata['status'] == 'success') {
           User user = User.fromJson(jsondata['data']);
-          Fluttertoast.showToast(
-              msg: 'Login Success', toastLength: Toast.LENGTH_SHORT);
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              "Login Success",
+              textAlign: TextAlign.center,
+            ),
+            duration: Duration(seconds: 1),
+          ));
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -217,26 +200,28 @@ class _LoginScreenState extends State<LoginScreen> {
                         user: user,
                       )));
         } else {
-          Fluttertoast.showToast(
-              msg: 'Login Failed', toastLength: Toast.LENGTH_SHORT);
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+            "Login Failed",
+            textAlign: TextAlign.center,
+          )));
         }
       }
     });
   }
 
   void saveremovepref(bool value) async {
-    FocusScope.of(context).requestFocus(FocusNode());
     String email = _emailEditingController.text;
     String password = _passEditingController.text;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (value) {
-      if (!_formKey.currentState!.validate()) {
+      if (!_formkey.currentState!.validate()) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text(
               'Please fill in the login credentials',
               textAlign: TextAlign.center,
             ),
-            duration: Duration(seconds: 2)));
+            duration: Duration(seconds: 1)));
         _isChecked = false;
         return;
       }
@@ -248,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
             'Preferences Stored',
             textAlign: TextAlign.center,
           ),
-          duration: Duration(seconds: 2)));
+          duration: Duration(seconds: 1)));
     } else {
       await prefs.setString('email', '');
       await prefs.setString('pass', '');
@@ -260,7 +245,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Preferences Removed', textAlign: TextAlign.center),
-          duration: Duration(seconds: 2)));
+          duration: Duration(seconds: 1)));
     }
   }
 
@@ -269,16 +254,19 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = (prefs.getString('email')) ?? '';
     String password = (prefs.getString('pass')) ?? '';
     _isChecked = (prefs.getBool('checkbox')) ?? false;
-    if (prefs.getBool('checkbox') == true) {
+    if (email.length > 1) {
       setState(() {
         _emailEditingController.text = email;
         _passEditingController.text = password;
         _isChecked = true;
       });
-    } else {
-      _emailEditingController.text = email;
-      _passEditingController.text = password;
-      _isChecked = false;
     }
   }
+
+  void _goToRegister() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (content) => const RegistrationScreen()));
+  }
+
+  void _forgotDialog() {}
 }

@@ -1,49 +1,48 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:mynelayan/config.dart';
-import 'package:mynelayan/models/catch.dart';
-import 'package:mynelayan/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:lab_assignment_2/appconfig/myconfig.dart';
+import 'package:lab_assignment_2/models/item.dart';
+import 'package:lab_assignment_2/models/user.dart';
 
-class EditCatchScreen extends StatefulWidget {
+class EditItemScreen extends StatefulWidget {
   final User user;
-  final Catch usercatch;
+  final Item item;
 
-  const EditCatchScreen(
-      {super.key, required this.user, required this.usercatch});
+  const EditItemScreen({super.key, required this.user, required this.item});
 
   @override
-  State<EditCatchScreen> createState() => _EditCatchScreenState();
+  State<EditItemScreen> createState() => _EditItemScreenState();
 }
 
-class _EditCatchScreenState extends State<EditCatchScreen> {
+class _EditItemScreenState extends State<EditItemScreen> {
   var pathAsset = "assets/images/camera.png";
   final _formKey = GlobalKey<FormState>();
   late double screenHeight, screenWidth, cardwitdh;
-  final TextEditingController _catchnameEditingController =
+  final TextEditingController _itemnameEditingController =
       TextEditingController();
-  final TextEditingController _catchdescEditingController =
+  final TextEditingController _itemdescEditingController =
       TextEditingController();
-  final TextEditingController _catchpriceEditingController =
+  final TextEditingController _itemqtyEditingController =
       TextEditingController();
-  final TextEditingController _catchqtyEditingController =
+  final TextEditingController _itempriceEditingController =
       TextEditingController();
   final TextEditingController _prstateEditingController =
       TextEditingController();
   final TextEditingController _prlocalEditingController =
       TextEditingController();
-  String selectedType = "Fish";
-  List<String> catchlist = [
-    "Fish",
-    "Crab",
-    "Squid",
-    "Oysters",
-    "Mussels",
-    "Octopus",
-    "Scallops",
-    "Lobsters",
-    "Other",
+  String selectedType = "Clothing";
+  List<String> itemlist = [
+    "Clothing",
+    "Electronics",
+    "Home Appliances",
+    "Accessories",
+    "Books",
+    "Sports/Fitness",
+    "Beauty/Personal Care",
+    "Tools",
+    "Miscellaneous",
   ];
 
   String curaddress = "";
@@ -54,14 +53,14 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
   @override
   void initState() {
     super.initState();
-    _catchnameEditingController.text = widget.usercatch.catchName.toString();
-    _catchdescEditingController.text = widget.usercatch.catchDesc.toString();
-    _catchpriceEditingController.text =
-        double.parse(widget.usercatch.catchPrice.toString()).toStringAsFixed(2);
-    _catchqtyEditingController.text = widget.usercatch.catchQty.toString();
-    _prstateEditingController.text = widget.usercatch.catchState.toString();
-    _prlocalEditingController.text = widget.usercatch.catchLocality.toString();
-    selectedType = widget.usercatch.catchType.toString();
+    _itemnameEditingController.text = widget.item.itemName.toString();
+    _itemdescEditingController.text = widget.item.itemDesc.toString();
+    _itempriceEditingController.text =
+        double.parse(widget.item.itemPrice.toString()).toStringAsFixed(2);
+    _itemqtyEditingController.text = widget.item.itemQty.toString();
+    _prstateEditingController.text = widget.item.itemState.toString();
+    _prlocalEditingController.text = widget.item.itemLocality.toString();
+    selectedType = widget.item.itemType.toString();
   }
 
   @override
@@ -70,8 +69,10 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Update Catch"),
-      ),
+          title: const Text(
+        "Update Item",
+        style: TextStyle(fontFamily: 'Merriweather'),
+      )),
       body: Column(children: [
         Flexible(
             flex: 4,
@@ -80,23 +81,73 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
               child: Card(
-                child: Container(
-                  width: screenWidth,
-                  child: CachedNetworkImage(
-                    width: screenWidth,
-                    fit: BoxFit.cover,
-                    imageUrl:
-                        "${Config.server}/assets/catches/${widget.usercatch.catchId}.png",
-                    placeholder: (context, url) =>
-                        const LinearProgressIndicator(),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: screenWidth * 0.9,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 2.0,
+                          ),
+                        ),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl:
+                              "${MyConfig().server}/assets/items/${widget.item.itemId}_1.png",
+                          placeholder: (context, url) =>
+                              const LinearProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Container(
+                        width: screenWidth * 0.9,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 2.0,
+                          ),
+                        ),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl:
+                              "${MyConfig().server}/assets/items/${widget.item.itemId}_2.png",
+                          placeholder: (context, url) =>
+                              const LinearProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Container(
+                        width: screenWidth * 0.9,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 2.0,
+                          ),
+                        ),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl:
+                              "${MyConfig().server}/assets/items/${widget.item.itemId}_3.png",
+                          placeholder: (context, url) =>
+                              const LinearProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             )),
         Expanded(
-          flex: 6,
+          flex: 7,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
             child: Form(
@@ -113,8 +164,6 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
                         SizedBox(
                           height: 60,
                           child: DropdownButton(
-                            //sorting dropdownoption
-                            // Not necessary for Option 1
                             value: selectedType,
                             onChanged: (newValue) {
                               setState(() {
@@ -122,7 +171,7 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
                                 print(selectedType);
                               });
                             },
-                            items: catchlist.map((selectedType) {
+                            items: itemlist.map((selectedType) {
                               return DropdownMenuItem(
                                 value: selectedType,
                                 child: Text(
@@ -132,38 +181,34 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
                             }).toList(),
                           ),
                         ),
-                        Expanded(
-                          child: TextFormField(
-                              //enabled: false,
-                              textInputAction: TextInputAction.next,
-                              validator: (val) =>
-                                  val!.isEmpty || (val.length < 3)
-                                      ? "Catch name must be longer than 3"
-                                      : null,
-                              onFieldSubmitted: (v) {},
-                              controller: _catchnameEditingController,
-                              keyboardType: TextInputType.text,
-                              decoration: const InputDecoration(
-                                  labelText: 'Catch Name',
-                                  labelStyle: TextStyle(),
-                                  icon: Icon(Icons.abc),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(width: 2.0),
-                                  ))),
-                        )
                       ],
                     ),
                     TextFormField(
                         textInputAction: TextInputAction.next,
+                        validator: (val) => val!.isEmpty || (val.length < 3)
+                            ? "Item name must be longer than 3"
+                            : null,
+                        onFieldSubmitted: (v) {},
+                        controller: _itemnameEditingController,
+                        keyboardType: TextInputType.text,
+                        decoration: const InputDecoration(
+                            labelText: 'Item Name',
+                            labelStyle: TextStyle(),
+                            icon: Icon(Icons.abc_sharp),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 2.0),
+                            ))),
+                    TextFormField(
+                        textInputAction: TextInputAction.next,
                         validator: (val) => val!.isEmpty
-                            ? "Catch description must be longer than 10"
+                            ? "Item description must be longer than 10"
                             : null,
                         onFieldSubmitted: (v) {},
                         maxLines: 4,
-                        controller: _catchdescEditingController,
+                        controller: _itemdescEditingController,
                         keyboardType: TextInputType.text,
                         decoration: const InputDecoration(
-                            labelText: 'Catch Description',
+                            labelText: 'Item Description',
                             alignLabelWithHint: true,
                             labelStyle: TextStyle(),
                             icon: Icon(
@@ -182,12 +227,12 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
                                   ? "Product price must contain value"
                                   : null,
                               onFieldSubmitted: (v) {},
-                              controller: _catchpriceEditingController,
+                              controller: _itempriceEditingController,
                               keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
-                                  labelText: 'Catch Price',
+                                  labelText: 'Item Price',
                                   labelStyle: TextStyle(),
-                                  icon: Icon(Icons.money),
+                                  icon: Icon(Icons.attach_money_rounded),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(width: 2.0),
                                   ))),
@@ -199,10 +244,10 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
                               validator: (val) => val!.isEmpty
                                   ? "Quantity should be more than 0"
                                   : null,
-                              controller: _catchqtyEditingController,
+                              controller: _itemqtyEditingController,
                               keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
-                                  labelText: 'Catch Quantity',
+                                  labelText: 'Item Quantity',
                                   labelStyle: TextStyle(),
                                   icon: Icon(Icons.numbers),
                                   focusedBorder: OutlineInputBorder(
@@ -257,9 +302,9 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
                       height: 50,
                       child: ElevatedButton(
                           onPressed: () {
-                            udpateDialog();
+                            updateDialog();
                           },
-                          child: const Text("Update Catch")),
+                          child: const Text("Update Item")),
                     )
                   ],
                 ),
@@ -271,7 +316,7 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
     );
   }
 
-  void udpateDialog() {
+  void updateDialog() {
     if (!_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Check your input")));
@@ -285,7 +330,7 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0))),
           title: const Text(
-            "Update your catch?",
+            "Update your item?",
             style: TextStyle(),
           ),
           content: const Text("Are you sure?", style: TextStyle()),
@@ -297,8 +342,7 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
               ),
               onPressed: () {
                 Navigator.of(context).pop();
-                updateCatch();
-                //registerUser();
+                updateItem();
               },
             ),
             TextButton(
@@ -316,21 +360,20 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
     );
   }
 
-  void updateCatch() {
-    String catchname = _catchnameEditingController.text;
-    String catchdesc = _catchdescEditingController.text;
-    String catchprice = _catchpriceEditingController.text;
-    String catchqty = _catchqtyEditingController.text;
+  void updateItem() {
+    String itemname = _itemnameEditingController.text;
+    String itemdesc = _itemdescEditingController.text;
+    String itemqty = _itemqtyEditingController.text;
+    String itemprice = _itempriceEditingController.text;
 
-    http.post(Uri.parse("${Config.server}/php/update_catch.php"),
-        body: {
-          "catchid": widget.usercatch.catchId,
-          "catchname": catchname,
-          "catchdesc": catchdesc,
-          "catchprice": catchprice,
-          "catchqty": catchqty,
-          "type": selectedType,
-        }).then((response) {
+    http.post(Uri.parse("${MyConfig().server}/php/update_item.php"), body: {
+      "itemid": widget.item.itemId,
+      "itemname": itemname,
+      "itemdesc": itemdesc,
+      "itemqty": itemqty,
+      "itemprice": itemprice,
+      "type": selectedType,
+    }).then((response) {
       print(response.body);
       if (response.statusCode == 200) {
         var jsondata = jsonDecode(response.body);
@@ -345,7 +388,6 @@ class _EditCatchScreenState extends State<EditCatchScreen> {
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("Update Failed")));
-        Navigator.pop(context);
       }
     });
   }

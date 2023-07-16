@@ -6,8 +6,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:http/http.dart' as http;
+import 'package:lab_assignment_2/appconfig/myconfig.dart';
 import 'package:lab_assignment_2/models/user.dart';
-import 'package:lab_assignment_2/myconfig.dart';
 
 class NewItemScreen extends StatefulWidget {
   final User user;

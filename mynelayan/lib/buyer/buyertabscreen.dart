@@ -3,14 +3,12 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:mynelayan/config.dart';
+import 'package:mynelayan/appconfig/config.dart';
 import 'package:mynelayan/models/catch.dart';
 import 'package:mynelayan/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'buyercartscreen.dart';
 import 'buyerdetailscreen.dart';
-
-//for buyer screen
 
 class BuyerTabScreen extends StatefulWidget {
   final User user;
@@ -147,7 +145,7 @@ class _BuyerTabScreenState extends State<BuyerTabScreen> {
                                   fit: BoxFit.fill,
                                   height: 111,
                                   imageUrl:
-                                      "${Config.server}/assets/catches/${catchList[index].catchId}.png",
+                                      "${MyConfig.server}/assets/catches/${catchList[index].catchId}.png",
                                   placeholder: (context, url) =>
                                       const LinearProgressIndicator(),
                                   errorWidget: (context, url, error) =>
@@ -201,7 +199,7 @@ class _BuyerTabScreenState extends State<BuyerTabScreen> {
   }
 
   void loadCatches(int pg) {
-    http.post(Uri.parse("${Config.server}/php/load_catches.php"), body: {
+    http.post(Uri.parse("${MyConfig.server}/php/load_catches.php"), body: {
       "cartuserid": widget.user.id,
       "pageno": pg.toString()
     }).then((response) {
@@ -275,7 +273,7 @@ class _BuyerTabScreenState extends State<BuyerTabScreen> {
   }
 
   void searchCatch(String search) {
-    http.post(Uri.parse("${Config.server}/php/load_catches.php"), body: {
+    http.post(Uri.parse("${MyConfig.server}/php/load_catches.php"), body: {
       "cartuserid": widget.user.id,
       "search": search
     }).then((response) {

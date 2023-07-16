@@ -2,12 +2,12 @@ import 'dart:convert';
 // import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lab_assignment_2/appconfig/myconfig.dart';
 // import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:lab_assignment_2/models/item.dart';
 import 'package:lab_assignment_2/models/user.dart';
-import 'package:lab_assignment_2/myconfig.dart';
-import 'package:lab_assignment_2/screens/edititemscreen.dart';
-import 'package:lab_assignment_2/screens/newitemscreen.dart';
+import 'package:lab_assignment_2/item/edititemscreen.dart';
+import 'package:lab_assignment_2/item/newitemscreen.dart';
 import 'package:http/http.dart' as http;
 
 class ItemTabScreen extends StatefulWidget {
@@ -202,15 +202,14 @@ class _ItemTabScreenState extends State<ItemTabScreen> {
       // log(response.body);
       itemList.clear();
       if (response.statusCode == 200) {
-        setState(() {
-          var jsondata = jsonDecode(response.body);
-          if (jsondata['status'] == "success") {
-            var extractdata = jsondata['data'];
-            extractdata['items'].forEach((v) {
-              itemList.add(Item.fromJson(v));
-            });
-          }
-        });
+        var jsondata = jsonDecode(response.body);
+        if (jsondata['status'] == "success") {
+          var extractdata = jsondata['data'];
+          extractdata['items'].forEach((v) {
+            itemList.add(Item.fromJson(v));
+          });
+        }
+        setState(() {});
       }
     });
   }
@@ -277,10 +276,9 @@ class _ItemTabScreenState extends State<ItemTabScreen> {
     return Future.delayed(
       const Duration(seconds: 1),
       () {
-        setState(() {
-          itemList.clear();
-          loadsellerItems();
-        });
+        itemList.clear();
+        loadsellerItems();
+        setState(() {});
       },
     );
   }

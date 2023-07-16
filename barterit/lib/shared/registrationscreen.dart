@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:lab_assignment_2/myconfig.dart';
-import 'package:lab_assignment_2/screens/loginscreen.dart';
+import 'package:lab_assignment_2/appconfig/myconfig.dart';
+import 'package:lab_assignment_2/shared/loginscreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -5,7 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mynelayan/config.dart';
+import 'package:mynelayan/appconfig/config.dart';
 import 'package:mynelayan/models/user.dart';
 import 'package:http/http.dart' as http;
 
@@ -431,7 +431,7 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
     String locality = _prlocalEditingController.text;
     String base64Image = base64Encode(_image!.readAsBytesSync());
 
-    http.post(Uri.parse("${Config.server}/php/insert_catch.php"), body: {
+    http.post(Uri.parse("${MyConfig.server}/php/insert_catch.php"), body: {
       "userid": widget.user.id.toString(),
       "catchname": catchname,
       "catchdesc": catchdesc,
@@ -492,20 +492,18 @@ class _NewCatchScreenState extends State<NewCatchScreen> {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(pos.latitude, pos.longitude);
     if (placemarks.isEmpty) {
-      setState(() {
-        _prlocalEditingController.text = "Changlun";
-        _prstateEditingController.text = "Kedah";
-        prlat = "6.443455345";
-        prlong = "100.05488449";
-      });
+      _prlocalEditingController.text = "Changlun";
+      _prstateEditingController.text = "Kedah";
+      prlat = "6.443455345";
+      prlong = "100.05488449";
+      setState(() {});
     } else {
-      setState(() {
-        _prlocalEditingController.text = placemarks[0].locality.toString();
-        _prstateEditingController.text =
-            placemarks[0].administrativeArea.toString();
-        prlat = _currentPosition.latitude.toString();
-        prlong = _currentPosition.longitude.toString();
-      });
+      _prlocalEditingController.text = placemarks[0].locality.toString();
+      _prstateEditingController.text =
+          placemarks[0].administrativeArea.toString();
+      prlat = _currentPosition.latitude.toString();
+      prlong = _currentPosition.longitude.toString();
+      setState(() {});
     }
   }
 }
