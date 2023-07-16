@@ -1,4 +1,4 @@
-# lab_assignment_2
+# Barter_IT
 
 A new Flutter project.
 
