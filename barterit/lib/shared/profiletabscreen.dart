@@ -78,7 +78,6 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                           errorWidget: (context, url, error) => const Icon(
                               Icons.image_not_supported,
                               size: 150))),
-                  const SizedBox(width: 10),
                   Expanded(
                       flex: 6,
                       child: Column(
