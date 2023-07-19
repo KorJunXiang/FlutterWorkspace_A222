@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lab_assignment_2/appconfig/myconfig.dart';
+import 'package:lab_assignment_2/home/cartscreen.dart';
+import 'package:lab_assignment_2/home/orderscreen.dart';
 import 'package:lab_assignment_2/models/item.dart';
 import 'package:lab_assignment_2/models/user.dart';
 import 'package:http/http.dart' as http;
@@ -26,11 +28,12 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   var color;
   List<Item> itemList = <Item>[];
   TextEditingController searchController = TextEditingController();
+  int cartqty = 0;
 
   @override
   void initState() {
     super.initState();
-    loadItems(1);
+    loadItems();
   }
 
   @override
@@ -62,9 +65,52 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
               },
               icon: const Icon(Icons.search)),
           TextButton.icon(
-              onPressed: () {},
+              onPressed: () async {
+                if (cartqty > 0) {
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (content) => CartScreen(
+                                user: widget.user,
+                              )));
+                  loadItems();
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("No item in cart")));
+                }
+              },
               icon: const Icon(Icons.shopping_cart),
-              label: const Text('0'))
+              label: Text(cartqty.toString())),
+          PopupMenuButton(
+              // add icon, by default "3 dot" icon
+              // icon: Icon(Icons.book)
+              itemBuilder: (context) {
+            return [
+              const PopupMenuItem<int>(
+                value: 0,
+                child: Text("My Order"),
+              ),
+              const PopupMenuItem<int>(
+                value: 1,
+                child: Text("New"),
+              ),
+            ];
+          }, onSelected: (value) async {
+            if (value == 0) {
+              if (widget.user.id.toString() == "na") {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Please login/register an account")));
+                return;
+              }
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (content) => OrderScreen(
+                            user: widget.user,
+                          )));
+            } else if (value == 1) {
+            } else if (value == 2) {}
+          }),
         ],
       ),
       body: RefreshIndicator(
@@ -108,9 +154,12 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => ItemDetailScreen(
-                                            user: widget.user, item: item),
+                                          user: widget.user,
+                                          item: item,
+                                          page: curpage,
+                                        ),
                                       ));
-                                  // loadItems(1);
+                                  loadItems();
                                 },
                                 child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -164,9 +213,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                     itemCount: numofpage,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      //build the list for textbutton with scroll
                       if ((curpage - 1) == index) {
-                        //set current page number active
                         color = Colors.red;
                       } else {
                         color = Colors.black;
@@ -174,7 +221,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                       return TextButton(
                           onPressed: () {
                             curpage = index + 1;
-                            loadItems(index + 1);
+                            loadItems();
                           },
                           child: Text(
                             (index + 1).toString(),
@@ -188,9 +235,11 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
     );
   }
 
-  void loadItems(int page) {
-    http.post(Uri.parse("${MyConfig().server}/php/load_items.php"),
-        body: {"pageno": page.toString()}).then((response) {
+  void loadItems() {
+    http.post(Uri.parse("${MyConfig().server}/php/load_items.php"), body: {
+      "cartuserid": widget.user.id,
+      "pageno": curpage.toString()
+    }).then((response) {
       // print(response.body);
       // log(response.body);
       itemList.clear();
@@ -199,6 +248,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         if (jsondata['status'] == "success") {
           numofpage = int.parse(jsondata['numofpage']);
           numberofresult = int.parse(jsondata['numberofresult']);
+          cartqty = int.parse(jsondata['cartqty'].toString());
           var extractdata = jsondata['data'];
           extractdata['items'].forEach((v) {
             itemList.add(Item.fromJson(v));
@@ -217,7 +267,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         setState(() {
           itemList.clear();
           curpage = 1;
-          loadItems(1);
+          loadItems();
         });
       },
     );

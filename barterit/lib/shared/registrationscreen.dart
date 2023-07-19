@@ -58,6 +58,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     key: _formKey,
                     child: Column(children: [
                       TextFormField(
+                          textInputAction: TextInputAction.next,
                           controller: _nameEditingController,
                           validator: (val) => val!.isEmpty || (val.length < 5)
                               ? "name must be longer than 5"
@@ -73,6 +74,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 borderSide: BorderSide(width: 2.0),
                               ))),
                       TextFormField(
+                          textInputAction: TextInputAction.next,
                           controller: _emailEditingController,
                           validator: (val) => val!.isEmpty ||
                                   !val.contains("@") ||
@@ -90,6 +92,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 borderSide: BorderSide(width: 2.0),
                               ))),
                       TextFormField(
+                          textInputAction: TextInputAction.next,
                           controller: _pass1EditingController,
                           validator: (val) => val!.isEmpty || (val.length < 5)
                               ? "password must be longer than 5"
@@ -117,6 +120,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 borderSide: BorderSide(width: 2.0),
                               ))),
                       TextFormField(
+                          textInputAction: TextInputAction.done,
                           controller: _pass2EditingController,
                           validator: (val) => val!.isEmpty || (val.length < 5)
                               ? "password must be longer than 5"
@@ -301,6 +305,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           await prefs.setString('email', email);
           await prefs.setString('pass', password);
           await prefs.setBool('checkbox', false);
+          // ignore: use_build_context_synchronously
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (content) => const LoginScreen()));
         } else {

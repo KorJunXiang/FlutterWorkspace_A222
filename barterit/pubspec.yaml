@@ -41,6 +41,8 @@ dependencies:
   geocoding: ^2.1.0
   flutter_cache_manager: ^3.3.0
   intl: ^0.18.1
+  webview_flutter: ^3.0.4
+  flutter_osm_plugin: ^0.55.3
 
 
 dev_dependencies:

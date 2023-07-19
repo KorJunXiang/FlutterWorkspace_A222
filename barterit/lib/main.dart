@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lab_assignment_2/splashscreen.dart';
+import 'package:lab_assignment_2/appconfig/color_schemes.g.dart';
+import 'package:lab_assignment_2/shared/splashscreen.dart';
 
-import 'color_schemes.g.dart';
 
 void main() => runApp(const MyApp());
 

@@ -222,7 +222,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
                         Flexible(
                           flex: 5,
                           child: TextFormField(
-                              textInputAction: TextInputAction.next,
+                              textInputAction: TextInputAction.done,
                               validator: (val) => val!.isEmpty
                                   ? "Quantity should be more than 0"
                                   : null,
@@ -522,20 +522,18 @@ class _NewItemScreenState extends State<NewItemScreen> {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(pos.latitude, pos.longitude);
     if (placemarks.isEmpty) {
-      setState(() {
-        _prlocalEditingController.text = "Changlun";
-        _prstateEditingController.text = "Kedah";
-        prlat = "6.443455345";
-        prlong = "100.05488449";
-      });
+      _prlocalEditingController.text = "Changlun";
+      _prstateEditingController.text = "Kedah";
+      prlat = "6.443455345";
+      prlong = "100.05488449";
+      setState(() {});
     } else {
-      setState(() {
-        _prlocalEditingController.text = placemarks[0].locality.toString();
-        _prstateEditingController.text =
-            placemarks[0].administrativeArea.toString();
-        prlat = _currentPosition.latitude.toString();
-        prlong = _currentPosition.longitude.toString();
-      });
+      _prlocalEditingController.text = placemarks[0].locality.toString();
+      _prstateEditingController.text =
+          placemarks[0].administrativeArea.toString();
+      prlat = _currentPosition.latitude.toString();
+      prlong = _currentPosition.longitude.toString();
+      setState(() {});
       // print(placemarks[0].administrativeArea.toString());
       // print(placemarks[0].locality.toString());
     }

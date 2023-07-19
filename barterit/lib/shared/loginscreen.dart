@@ -67,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     key: _formKey,
                     child: Column(children: [
                       TextFormField(
+                          textInputAction: TextInputAction.next,
                           controller: _emailEditingController,
                           validator: (val) => val!.isEmpty ||
                                   !val.contains("@") ||
@@ -76,7 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(
                               labelText: 'Email',
-                              labelStyle: TextStyle(fontFamily: 'Merriweather'),
+                              labelStyle:
+                                  TextStyle(fontFamily: 'Merriweather.italic'),
                               icon: Icon(Icons.email),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(width: 2.0),
@@ -88,8 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: _passwordVisible,
                           decoration: InputDecoration(
                               labelText: 'Password',
-                              labelStyle:
-                                  const TextStyle(fontFamily: 'Merriweather'),
+                              labelStyle: const TextStyle(
+                                  fontFamily: 'Merriweather.italic'),
                               icon: const Icon(Icons.lock),
                               suffixIcon: IconButton(
                                   onPressed: () {

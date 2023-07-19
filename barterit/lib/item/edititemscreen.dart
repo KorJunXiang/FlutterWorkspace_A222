@@ -240,7 +240,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                         Flexible(
                           flex: 5,
                           child: TextFormField(
-                              textInputAction: TextInputAction.next,
+                              textInputAction: TextInputAction.done,
                               validator: (val) => val!.isEmpty
                                   ? "Quantity should be more than 0"
                                   : null,

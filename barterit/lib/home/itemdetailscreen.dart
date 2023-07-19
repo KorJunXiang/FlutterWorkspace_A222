@@ -1,15 +1,20 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:lab_assignment_2/appconfig/myconfig.dart';
 import 'package:lab_assignment_2/models/item.dart';
 import 'package:lab_assignment_2/models/user.dart';
+import 'package:http/http.dart' as http;
 
 class ItemDetailScreen extends StatefulWidget {
   final User user;
   final Item item;
 
-  const ItemDetailScreen({super.key, required this.user, required this.item});
+  const ItemDetailScreen(
+      {super.key, required this.user, required this.item, required int page});
 
   @override
   State<ItemDetailScreen> createState() => _ItemDetailScreenState();
@@ -259,10 +264,100 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         ),
         ElevatedButton(
             onPressed: () {
-              // addtocartdialog();
+              addtocartdialog();
             },
             child: const Text("Add to Cart"))
       ]),
     );
+  }
+
+  void addtocartdialog() {
+    if (widget.user.id.toString() == "na") {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Please register to add item to cart")));
+      return;
+    }
+    if (widget.user.id.toString() == widget.item.userId.toString()) {
+      Fluttertoast.showToast(
+          msg: "User cannot add own item",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          fontSize: 16.0);
+      return;
+    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0))),
+          title: const Text(
+            "Add to cart?",
+            style: TextStyle(),
+          ),
+          content: const Text("Are you sure?", style: TextStyle()),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                "Yes",
+                style: TextStyle(),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                addtocart();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                "No",
+                style: TextStyle(),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void addtocart() {
+    http.post(Uri.parse("${MyConfig().server}/php/addtocart.php"), body: {
+      "item_id": widget.item.itemId.toString(),
+      "item_qty": userqty.toString(),
+      "item_price": totalprice.toString(),
+      "userid": widget.user.id,
+      "sellerid": widget.item.userId
+    }).then((response) {
+      if (response.statusCode == 200) {
+        var jsondata = jsonDecode(response.body);
+        if (jsondata['status'] == 'success') {
+          Fluttertoast.showToast(
+              msg: "Success",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              fontSize: 16.0);
+        } else {
+          Fluttertoast.showToast(
+              msg: "Failed",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              fontSize: 16.0);
+        }
+        Navigator.pop(context);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Failed",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            fontSize: 16.0);
+        Navigator.pop(context);
+      }
+    });
   }
 }

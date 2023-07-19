@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lab_assignment_2/appconfig/myconfig.dart';
+import 'package:lab_assignment_2/item/sellerorderscreen.dart';
 // import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:lab_assignment_2/models/item.dart';
 import 'package:lab_assignment_2/models/user.dart';
@@ -46,20 +47,49 @@ class _ItemTabScreenState extends State<ItemTabScreen> {
     }
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          maintitle,
-          style:
-              const TextStyle(fontSize: 26, fontFamily: 'Merriweather.italic'),
-        ),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () {
-        //         _clearImageCache();
-        //       },
-        //       icon: const Icon(Icons.refresh))
-        // ]
-      ),
+          automaticallyImplyLeading: false,
+          title: Text(
+            maintitle,
+            style: const TextStyle(
+                fontSize: 26, fontFamily: 'Merriweather.italic'),
+          ),
+          actions: [
+            PopupMenuButton(
+                // add icon, by default "3 dot" icon
+                // icon: Icon(Icons.book)
+                itemBuilder: (context) {
+              return [
+                const PopupMenuItem<int>(
+                  value: 0,
+                  child: Text("My Order"),
+                ),
+                const PopupMenuItem<int>(
+                  value: 1,
+                  child: Text("New"),
+                ),
+              ];
+            }, onSelected: (value) async {
+              if (value == 0) {
+                if (widget.user.id.toString() == "na") {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Please login/register an account")));
+                  return;
+                }
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (content) => SellerOrderScreen(
+                              user: widget.user,
+                            )));
+              } else if (value == 1) {
+              } else if (value == 2) {}
+            }),
+            // IconButton(
+            //     onPressed: () {
+            //       _clearImageCache();
+            //     },
+            //     icon: const Icon(Icons.refresh))
+          ]),
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: widget.user.id.toString() == 'na'
@@ -287,7 +317,10 @@ class _ItemTabScreenState extends State<ItemTabScreen> {
   //   await DefaultCacheManager().emptyCache();
   //   // ignore: use_build_context_synchronously
   //   ScaffoldMessenger.of(context).showSnackBar(
-  //     const SnackBar(content: Text('Image cache cleared.')),
+  //     const SnackBar(
+  //       content: Text('Image cache cleared.'),
+  //       duration: Duration(seconds: 2),
+  //     ),
   //   );
   // }
 }
