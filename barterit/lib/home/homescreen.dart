@@ -61,11 +61,23 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         actions: [
           IconButton(
               onPressed: () {
+                if (widget.user.id.toString() == "na") {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Please login/register an account"),
+                      duration: Duration(seconds: 2)));
+                  return;
+                }
                 showsearchDialog();
               },
               icon: const Icon(Icons.search)),
           TextButton.icon(
               onPressed: () async {
+                if (widget.user.id.toString() == "na") {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Please login/register an account"),
+                      duration: Duration(seconds: 2)));
+                  return;
+                }
                 if (cartqty > 0) {
                   await Navigator.push(
                       context,
@@ -99,7 +111,8 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             if (value == 0) {
               if (widget.user.id.toString() == "na") {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Please login/register an account")));
+                    content: Text("Please login/register an account"),
+                    duration: Duration(seconds: 2)));
                 return;
               }
               await Navigator.push(
@@ -148,6 +161,14 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                               elevation: 5,
                               child: InkWell(
                                 onTap: () async {
+                                  if (widget.user.id.toString() == "na") {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Please login/register an account"),
+                                            duration: Duration(seconds: 2)));
+                                    return;
+                                  }
                                   Item item =
                                       Item.fromJson(itemList[index].toJson());
                                   await Navigator.push(

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -34,14 +33,6 @@ class _SellerOrderDetailsScreenState extends State<SellerOrderDetailsScreen> {
       password: "na",
       otp: "na");
   String picuploc = "Not selected";
-  // Set<Marker> markers = {};
-  // final Completer<GoogleMapController> _controller =
-  //     Completer<GoogleMapController>();
-
-  // static const CameraPosition _kchanglun = CameraPosition(
-  //   target: LatLng(6.4301523, 100.4287586),
-  //   zoom: 12.4746,
-  // );
 
   @override
   void initState() {
@@ -49,13 +40,6 @@ class _SellerOrderDetailsScreenState extends State<SellerOrderDetailsScreen> {
     loadbuyer();
     loadorderdetails();
     selectStatus = widget.order.orderStatus.toString();
-    // if (widget.order.orderLat.toString() == "") {
-    //   picuploc = "Not selected";
-    // } else {
-    //   picuploc = "Selected";
-    //   pickupLatLng = LatLng(double.parse(widget.order.orderLat.toString()),
-    //       double.parse(widget.order.orderLng.toString()));
-    // }
   }
 
   @override
@@ -71,15 +55,14 @@ class _SellerOrderDetailsScreenState extends State<SellerOrderDetailsScreen> {
       body: Column(children: [
         Flexible(
           flex: 3,
-          //height: screenHeight / 5.5,
           child: Card(
               child: Row(
             children: [
               Container(
                 margin: const EdgeInsets.all(4),
                 width: screenWidth * 0.3,
-                child: Image.asset(
-                  "assets/images/profile.png",
+                child: Image.network(
+                  "${MyConfig().server}/assets/profile/${widget.order.buyerId}.png",
                 ),
               ),
               Column(
@@ -119,19 +102,6 @@ class _SellerOrderDetailsScreenState extends State<SellerOrderDetailsScreen> {
             ],
           )),
         ),
-        Container(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      // pickupDialog();
-                    },
-                    child: const Text("Select Pickup Location")),
-                Text(picuploc)
-              ],
-            )),
         orderdetailsList.isEmpty
             ? Container()
             : Expanded(
@@ -184,7 +154,6 @@ class _SellerOrderDetailsScreenState extends State<SellerOrderDetailsScreen> {
                       );
                     })),
         SizedBox(
-          // color: Colors.red,
           width: screenWidth,
           height: screenHeight * 0.1,
           child: Card(
@@ -227,7 +196,7 @@ class _SellerOrderDetailsScreenState extends State<SellerOrderDetailsScreen> {
           "sellerid": widget.order.sellerId,
           "orderbill": widget.order.orderBill
         }).then((response) {
-      log(response.body);
+      // log(response.body);
       //orderList.clear();
       if (response.statusCode == 200) {
         var jsondata = jsonDecode(response.body);
@@ -261,23 +230,9 @@ class _SellerOrderDetailsScreenState extends State<SellerOrderDetailsScreen> {
   }
 
   void submitStatus(String st) {
-    // if (pickupLatLng == null) {
-    //   Fluttertoast.showToast(
-    //       msg: "Please select pickup location",
-    //       toastLength: Toast.LENGTH_SHORT,
-    //       gravity: ToastGravity.CENTER,
-    //       timeInSecForIosWeb: 1,
-    //       fontSize: 16.0);
-    //   return;
-    // }
-    // String lat = pickupLatLng.latitude.toString();
-    // String lng = pickupLatLng.longitude.toString();
-
     http.post(Uri.parse("${MyConfig().server}/php/set_orderstatus.php"), body: {
       "orderid": widget.order.orderId,
       "status": st,
-      // "lat": lat,
-      // "lng": lng
     }).then((response) {
       log(response.body);
       //orderList.clear();
@@ -297,67 +252,4 @@ class _SellerOrderDetailsScreenState extends State<SellerOrderDetailsScreen> {
       }
     });
   }
-
-  // pickupDialog() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return StatefulBuilder(
-  //         builder: (context, setState) {
-  //           return AlertDialog(
-  //             title: const Text("Select your pickup location"),
-  //             content: GoogleMap(
-  //               mapType: MapType.normal,
-  //               initialCameraPosition: _kchanglun,
-  //               markers: markers.toSet(),
-  //               onTap: (newLatLng) {
-  //                 // print(newLatLng.latitude);
-  //                 // print(newLatLng.longitude);
-  //                 MarkerId markerId1 = const MarkerId("1");
-  //                 markers.clear();
-  //                 markers.add(Marker(
-  //                   markerId: markerId1,
-  //                   position: LatLng(newLatLng.latitude, newLatLng.longitude),
-  //                   icon: BitmapDescriptor.defaultMarkerWithHue(
-  //                       BitmapDescriptor.hueRed),
-  //                 ));
-  //                 pickupLatLng = newLatLng;
-  //                 setState(() {});
-  //               },
-  //               myLocationEnabled: true,
-  //               onMapCreated: (GoogleMapController controller) {
-  //                 _controller.complete(controller);
-  //               },
-  //             ),
-  //             actions: <Widget>[
-  //               TextButton(
-  //                 onPressed: () => Navigator.pop(context),
-  //                 child: const Text("Cancel"),
-  //               ),
-  //               TextButton(
-  //                 onPressed: () {
-  //                   if (pickupLatLng == null) {
-  //                     Fluttertoast.showToast(
-  //                         msg: "Please select pickup location from map",
-  //                         toastLength: Toast.LENGTH_SHORT,
-  //                         gravity: ToastGravity.CENTER,
-  //                         timeInSecForIosWeb: 1,
-  //                         fontSize: 16.0);
-  //                     return;
-  //                   } else {
-  //                     Navigator.pop(context);
-  //                     picuploc = "Selected";
-  //                   }
-  //                 },
-  //                 child: const Text("Select"),
-  //               ),
-  //             ],
-  //           );
-  //         },
-  //       );
-  //     },
-  //   ).then((val) {
-  //     setState(() {});
-  //   });
-  // }
 }

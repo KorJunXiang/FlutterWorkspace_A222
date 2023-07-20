@@ -1,7 +1,5 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
-
 import 'dart:convert';
-import 'dart:developer';
+// import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -24,7 +22,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   List<OrderDetails> orderdetailsList = <OrderDetails>[];
   late double screenHeight, screenWidth;
   String selectStatus = "Ready";
-  // Set<Marker> markers = {};
   List<String> statusList = [
     "New",
     "Processing",
@@ -40,36 +37,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       otp: "na");
   var pickupLatLng;
   String picuploc = "Not selected";
-  // var _pickupPosition;
 
   @override
   void initState() {
     super.initState();
     loadbuyer();
     loadorderdetails();
-    //selectStatus = widget.order.orderStatus.toString();
-    // if (widget.order.orderLat.toString() == "") {
-    //   picuploc = "Not selected";
-    //   _pickupPosition = const CameraPosition(
-    //     target: LatLng(6.4301523, 100.4287586),
-    //     zoom: 12.4746,
-    //   );
-    // } else {
-    //   picuploc = "Selected";
-    //   pickupLatLng = LatLng(double.parse(widget.order.orderLat.toString()),
-    //       double.parse(widget.order.orderLng.toString()));
-    //   _pickupPosition = CameraPosition(
-    //     target: pickupLatLng,
-    //     zoom: 18.4746,
-    //   );
-    //   MarkerId markerId1 = const MarkerId("1");
-    //   markers.clear();
-    //   markers.add(Marker(
-    //     markerId: markerId1,
-    //     position: pickupLatLng,
-    //     icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-    //   ));
-    // }
   }
 
   @override
@@ -88,8 +61,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               Container(
                 margin: const EdgeInsets.all(4),
                 width: screenWidth * 0.3,
-                child: Image.asset(
-                  "assets/images/profile.png",
+                child: Image.network(
+                  "${MyConfig().server}/assets/profile/${widget.order.buyerId}.png",
                 ),
               ),
               Column(
@@ -129,28 +102,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             ],
           )),
         ),
-        Container(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      // if (picuploc == "Selected") {
-                      //   loadMapDialog();
-                      // } else {
-                      //   Fluttertoast.showToast(
-                      //       msg: "Location not available",
-                      //       toastLength: Toast.LENGTH_SHORT,
-                      //       gravity: ToastGravity.CENTER,
-                      //       timeInSecForIosWeb: 1,
-                      //       fontSize: 16.0);
-                      // }
-                    },
-                    child: const Text("See Pickup Location")),
-                Text(picuploc)
-              ],
-            )),
         orderdetailsList.isEmpty
             ? Container()
             : Expanded(
@@ -203,7 +154,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       );
                     })),
         SizedBox(
-          // color: Colors.red,
           width: screenWidth,
           height: screenHeight * 0.1,
           child: Card(
@@ -211,23 +161,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   const Text("Set order status as completed"),
-                  // DropdownButton(
-                  //   itemHeight: 60,
-                  //   value: selectStatus,
-                  //   onChanged: (newValue) {
-                  //     setState(() {
-                  //       selectStatus = newValue.toString();
-                  //     });
-                  //   },
-                  //   items: statusList.map((selectStatus) {
-                  //     return DropdownMenuItem(
-                  //       value: selectStatus,
-                  //       child: Text(
-                  //         selectStatus,
-                  //       ),
-                  //     );
-                  //   }).toList(),
-                  // ),
                   ElevatedButton(
                       onPressed: () {
                         submitStatus("Completed");
@@ -248,7 +181,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           "orderbill": widget.order.orderBill,
           "sellerid": widget.order.sellerId
         }).then((response) {
-      log(response.body);
+      // log(response.body);
       //orderList.clear();
       if (response.statusCode == 200) {
         var jsondata = jsonDecode(response.body);
@@ -270,7 +203,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     http.post(Uri.parse("${MyConfig().server}/php/load_user.php"), body: {
       "userid": widget.order.buyerId,
     }).then((response) {
-      log(response.body);
+      // log(response.body);
       if (response.statusCode == 200) {
         var jsondata = jsonDecode(response.body);
         if (jsondata['status'] == 'success') {
@@ -284,7 +217,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   void submitStatus(String st) {
     http.post(Uri.parse("${MyConfig().server}/php/set_orderstatus.php"),
         body: {"orderid": widget.order.orderId, "status": st}).then((response) {
-      log(response.body);
+      // log(response.body);
       //orderList.clear();
       if (response.statusCode == 200) {
         var jsondata = jsonDecode(response.body);
@@ -302,49 +235,4 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       }
     });
   }
-
-  // void loadMapDialog() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return StatefulBuilder(
-  //         builder: (context, setState) {
-  //           return AlertDialog(
-  //             title: const Text("Select your pickup location"),
-  //             content: GoogleMap(
-  //               mapType: MapType.normal,
-  //               initialCameraPosition: _pickupPosition,
-  //               markers: markers.toSet(),
-  //             ),
-  //             actions: <Widget>[
-  //               TextButton(
-  //                 onPressed: () => Navigator.pop(context),
-  //                 child: const Text("Cancel"),
-  //               ),
-  //               TextButton(
-  //                 onPressed: () {
-  //                   if (pickupLatLng == null) {
-  //                     Fluttertoast.showToast(
-  //                         msg: "Please select pickup location from map",
-  //                         toastLength: Toast.LENGTH_SHORT,
-  //                         gravity: ToastGravity.CENTER,
-  //                         timeInSecForIosWeb: 1,
-  //                         fontSize: 16.0);
-  //                     return;
-  //                   } else {
-  //                     Navigator.pop(context);
-  //                     picuploc = "Selected";
-  //                   }
-  //                 },
-  //                 child: const Text("Select"),
-  //               ),
-  //             ],
-  //           );
-  //         },
-  //       );
-  //     },
-  //   ).then((val) {
-  //     setState(() {});
-  //   });
-  // }
 }
