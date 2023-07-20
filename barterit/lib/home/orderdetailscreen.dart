@@ -50,7 +50,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(title: const Text("Order Details")),
+      appBar: AppBar(
+          title: const Text("Order Details",
+              style: TextStyle(fontFamily: 'Merriweather'))),
       body: Column(children: [
         SizedBox(
           //flex: 3,

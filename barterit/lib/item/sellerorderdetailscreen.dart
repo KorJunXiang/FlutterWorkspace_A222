@@ -49,7 +49,7 @@ class _SellerOrderDetailsScreenState extends State<SellerOrderDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
           title: const Text(
-        "Order Details",
+        "Order/s Details",
         style: TextStyle(fontFamily: 'Merriweather'),
       )),
       body: Column(children: [
