@@ -61,12 +61,6 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                if (widget.user.id.toString() == "na") {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Please login/register an account"),
-                      duration: Duration(seconds: 2)));
-                  return;
-                }
                 showsearchDialog();
               },
               icon: const Icon(Icons.search)),

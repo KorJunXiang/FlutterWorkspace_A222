@@ -72,7 +72,8 @@ class _ItemTabScreenState extends State<ItemTabScreen> {
               if (value == 0) {
                 if (widget.user.id.toString() == "na") {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Please login/register an account")));
+                      content: Text("Please login/register an account"),
+                      duration: Duration(seconds: 2)));
                   return;
                 }
                 await Navigator.push(
