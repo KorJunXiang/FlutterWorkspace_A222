@@ -126,8 +126,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         child: itemList.isEmpty
             ? const Center(
                 child: Text("No Data",
-                    style: TextStyle(fontFamily: 'Merriweather.italic')),
-              )
+                    style: TextStyle(fontFamily: 'Merriweather.italic')))
             : Column(children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
