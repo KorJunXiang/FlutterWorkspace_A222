@@ -81,8 +81,9 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                               )));
                   loadItems();
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("No item in cart")));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("No item in cart"),
+                      duration: Duration(seconds: 2)));
                 }
               },
               icon: const Icon(Icons.shopping_cart),
